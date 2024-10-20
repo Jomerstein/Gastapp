@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gastapp/presentations/components/homeButton.dart';
+import 'package:gastapp/presentations/components/home_button.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -8,14 +8,14 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
    
 
-    return const Scaffold(
+    return  Scaffold(
       body:Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           
           children: [
-            SizedBox(height: 50),
-            Text('GastAPP', 
+            const SizedBox(height: 50),
+            const Text('GastAPP', 
             style: TextStyle(
             fontSize: 60, 
             fontFamily: 'Reem Kufi Ink', 
@@ -29,12 +29,11 @@ class HomeScreen extends StatelessWidget {
             
             )
             ),
-            SizedBox(height: 50),
-            HomeButton(color:Color.fromARGB(204, 52, 199, 89),textContent:  'Ingresos', route:  'hola'),
-            SizedBox(height: 50),
-            HomeButton(color:Color.fromARGB(204, 255, 59, 48) ,textContent:  'Gastos', route:  'hola'),
-            SizedBox(height: 50),
-            HomeButton(color:Color.fromARGB(204, 48, 131, 255),textContent:  'Consultas', route:  'hola'),
+            SizedBox(
+              height: MediaQuery.of(context).size.height - 700),
+            const HomeButton(color:Color.fromARGB(204, 255, 59, 48) ,textContent:  'Gastos / Ingresos', route:  'gastosingresos'),
+            const SizedBox(height: 50),
+            const HomeButton(color:Color.fromARGB(204, 48, 131, 255),textContent:  'Consultas', route:  'gastosingresos'), //cambiar esto
           
           ],
         ),

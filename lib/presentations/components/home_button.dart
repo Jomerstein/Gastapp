@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class HomeButton extends StatelessWidget {
   final Color color;
@@ -23,7 +24,9 @@ class HomeButton extends StatelessWidget {
         backgroundColor: color
         
       ),
-      onPressed: ()=>{'TENGO QUE HACER ESTO', print('ellcoo')}, //HACER EL ROUTER
+      onPressed: ()=>{
+        context.pushNamed(route)
+      }, //HACER EL ROUTER
       child:  Text(textContent, style: const TextStyle(color: Colors.black, fontSize: 30)
       )
       ),
