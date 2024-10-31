@@ -29,11 +29,10 @@ class HomeScreen extends StatelessWidget {
             
             )
             ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height - 700),
+            SizedBox(height: MediaQuery.of(context).size.height - 700),
             const HomeButton(color:Color.fromARGB(204, 255, 59, 48) ,textContent:  'Gastos / Ingresos', route:  'gastosingresos'),
             const SizedBox(height: 50),
-            const HomeButton(color:Color.fromARGB(204, 48, 131, 255),textContent:  'Consultas', route:  'gastosingresos'), //cambiar esto
+            const HomeButton(color:Color.fromARGB(204, 48, 131, 255),textContent:  'Consultas', route:  'consultas'), 
           
           ],
         ),
