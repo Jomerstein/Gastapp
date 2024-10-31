@@ -10,7 +10,15 @@ final GoRouter appRouter = GoRouter(
     GoRoute(path: '/', builder: (context, state)=> const HomeScreen()),
     GoRoute(name:'gastosingresos',path: '/gastosingresos', builder: (context, state) =>  GastosIngresosScreen()),
     GoRoute(name:'consultas',path: '/consultas', builder: (context, state) => const  ConsultasScreen()),
-    GoRoute(name:'listado',path: '/listado', builder: (context, state) =>  ListaIngresosWidget())
+    GoRoute(
+    name: 'listado',
+    path: '/listado/:descripcion', // Define el parámetro :id en la ruta
+    builder: (context, state) {
+    // Accede al parámetro usando state.params
+    final descripcion = state.pathParameters['descripcion']!;
+    return ListaIngresosWidget(descripcion: descripcion); // Pasa el parámetro al widget
+  },
+),
    
     
   ]

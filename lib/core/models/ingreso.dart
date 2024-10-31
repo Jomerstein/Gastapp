@@ -7,7 +7,7 @@ class Ingreso extends Transaccion {
      factory Ingreso.fromMap(Map<String, dynamic> data) {
     return Ingreso(
       id: data['id'] ?? '',
-      descripcion: data['descripcion'] ?? '', // Si estás almacenando el ID en el documento
+      descripcion: data['descripcion'] ?? '', 
       tipoDeMoneda: data['tipoDeMoneda'] ?? '',
       monto: data['monto'] ?? '',
       categoria: data['categoria'] ?? '', 

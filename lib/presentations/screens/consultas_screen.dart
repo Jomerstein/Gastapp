@@ -19,7 +19,7 @@ class ConsultasScreen extends ConsumerWidget {
     final anoSeleccionado = ref.watch(anoSeleccionadoProvider);
     
 
-    final categorias = ref.watch(getCategoriasFutureProvider);
+    final categorias = ref.watch(getCategoriasProvider);
    
    
      InputDecoration _inputDecoration(bool enabled) {
@@ -51,9 +51,9 @@ class ConsultasScreen extends ConsumerWidget {
                       ))
                   .toList(),
               onChanged: (value) {
-                ref.read(tipoSeleccionadoProvider.notifier).state = value;
-                ref.read(categoriaSeleccionadaProvider.notifier).state = null;
-                ref.read(anoSeleccionadoProvider.notifier).state = null;
+                ref.watch(tipoSeleccionadoProvider.notifier).state = value;
+                ref.watch(categoriaSeleccionadaProvider.notifier).state = null;
+                ref.watch(anoSeleccionadoProvider.notifier).state = null;
                
               },
               decoration: _inputDecoration(true),
@@ -62,6 +62,7 @@ class ConsultasScreen extends ConsumerWidget {
             const SizedBox(height: 16),
             const Text('CATEGORIA'),
             const SizedBox(height: 8),
+            
         categorias.when(
       data: (categorias) {
         return DropdownButtonFormField<String>(
@@ -71,9 +72,10 @@ class ConsultasScreen extends ConsumerWidget {
               child: Text(categoria.nombreCategoria),
             );
           }).toList(),
+          
           onChanged: tipoSeleccionado != null ? (value){
-          ref.read(categoriaSeleccionadaConsultaProvider.notifier).state = value;
-          ref.read(anoSeleccionadoProvider.notifier).state = null;
+          ref.watch(categoriaSeleccionadaConsultaProvider.notifier).state = value;
+          ref.watch(anoSeleccionadoProvider.notifier).state = null;
          
           }:null,
  
@@ -89,7 +91,7 @@ class ConsultasScreen extends ConsumerWidget {
     ),
              
             const SizedBox(height: 16),
-            const Text('AÑO'),
+            const Text('FECHA'),
             const SizedBox(height: 8),
           GestureDetector(
               onTap: () {
@@ -97,17 +99,12 @@ class ConsultasScreen extends ConsumerWidget {
               },
               child: TextField(
                 enabled: false,
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  hintText: anoSeleccionado != null
-                      ? DateFormat('dd/MM/yyyy').format(anoSeleccionado) // Formatea la fecha
-                      : 'Selecciona una fecha',
-                ),
+                decoration: _inputDecoration(categoriaSeleccionada != null)
               ),
             ),
             const SizedBox(height: 16),
-            const Text('MES'),
-            const SizedBox(height: 8),
+           
+       
        
             const SizedBox(height: 16),
             const Text('DESCRIPCION'),
@@ -123,7 +120,10 @@ class ConsultasScreen extends ConsumerWidget {
               alignment: Alignment.center,
               child: ElevatedButton(
                 onPressed: () {
-                  context.pushNamed('listado');
+                 context.pushNamed('listado', pathParameters: {
+                    'descripcion': descripcionController.text
+                  });
+             
                 },
                 child: const Text('Buscar'),
                 style: ElevatedButton.styleFrom(

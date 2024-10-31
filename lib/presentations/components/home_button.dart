@@ -25,11 +25,11 @@ class HomeButton extends StatelessWidget {
         
       ),
       onPressed: ()=>{
-       // context.pushNamed(route),
+       
         context.pushNamed(route),
 
         
-      }, //HACER EL ROUTER
+      },
       child:  Text(textContent, style: const TextStyle(color: Colors.black, fontSize: 30)
       )
       ),

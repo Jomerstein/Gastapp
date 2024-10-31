@@ -21,9 +21,9 @@ class HomeScreen extends StatelessWidget {
             fontFamily: 'Reem Kufi Ink', 
             color: Colors.black,
             shadows: [
-              Shadow(color: Colors.grey, // Color de la sombra
-              offset: Offset(3.0, 3.0), // Desplazamiento de la sombra
-              blurRadius: 5.0,) // Difuminado de la sombra)
+              Shadow(color: Colors.grey,
+              offset: Offset(3.0, 3.0), 
+              blurRadius: 5.0,) 
             ]
             
             

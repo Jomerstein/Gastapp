@@ -5,7 +5,6 @@ import 'package:gastapp/core/models/gasto.dart';
 import 'package:gastapp/core/models/ingreso.dart';
 import 'package:gastapp/presentations/providers/gastos_ingresos_provider.dart';
 
-import 'package:intl/intl.dart';
 
 
 class GastosIngresosScreen extends ConsumerWidget {
@@ -17,7 +16,8 @@ class GastosIngresosScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final categorias = ref.watch(getCategoriasProvider);
-     final selectedDate = ref.watch(selectedDateProvider);
+    
+
   
   
     return Scaffold(
@@ -160,7 +160,7 @@ class GastosIngresosScreen extends ConsumerWidget {
               
             ),
             const SizedBox(height: 16,),
-               const Text('FECHA'),
+            
             
               const Spacer(),
             
