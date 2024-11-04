@@ -4,7 +4,7 @@ import 'package:gastapp/core/models/categoria.dart';
 import 'package:gastapp/presentations/providers/consultas_providers.dart';
 import 'package:gastapp/presentations/providers/gastos_ingresos_provider.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
+
 
 
 class ConsultasScreen extends ConsumerWidget {
@@ -13,14 +13,10 @@ class ConsultasScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-   final TextEditingController descripcionController = TextEditingController();
+    final TextEditingController descripcionController = TextEditingController();
     final tipoSeleccionado = ref.watch(tipoSeleccionadoProvider);
     final categoriaSeleccionada = ref.watch(categoriaSeleccionadaConsultaProvider);
-    final anoSeleccionado = ref.watch(anoSeleccionadoProvider);
-    
-
     final categorias = ref.watch(getCategoriasProvider);
-   
    
      InputDecoration _inputDecoration(bool enabled) {
       return InputDecoration(
@@ -30,10 +26,10 @@ class ConsultasScreen extends ConsumerWidget {
       );
     }
 
-       return Scaffold(
+      return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
-        title: Text('Listado', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: const Text('Listado', style: TextStyle(fontWeight: FontWeight.bold)),
         centerTitle: true,
       ),
       body: Padding(
@@ -111,7 +107,7 @@ class ConsultasScreen extends ConsumerWidget {
             const SizedBox(height: 8),
             TextField(
               controller: descripcionController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 border: OutlineInputBorder(),
               ),
             ),
@@ -125,13 +121,22 @@ class ConsultasScreen extends ConsumerWidget {
                   });
              
                 },
-                child: const Text('Buscar'),
+                
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
                   textStyle: const TextStyle(color: Colors.white),
+                  
                 ),
+                child: const Text('Buscar'),
               ),
             ),
+            Align(
+              child: ElevatedButton(onPressed: ()=>{
+                  ref.watch(tipoSeleccionadoProvider.notifier).state = null,
+                  ref.watch(categoriaSeleccionadaConsultaProvider.notifier).state = null
+
+              },
+              child: const Text('Clear')), ),
             
           ],
         ),

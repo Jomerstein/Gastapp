@@ -234,7 +234,7 @@ void _showFormularioDialog(BuildContext context, WidgetRef ref) {
 
 class _BotonTransaccion extends ConsumerWidget {
 
-  const _BotonTransaccion({super.key});
+  const _BotonTransaccion();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -250,7 +250,7 @@ class _BotonTransaccion extends ConsumerWidget {
                       descripcion: descripcion,
                       tipoDeMoneda: tipoDeMoneda,
                       monto: monto,
-                      categoria: categoria, id: ''
+                      categoria: categoria
                     );
                     ref.read(agregarTransaccionProvider(gasto));
                   }else{
@@ -258,7 +258,7 @@ class _BotonTransaccion extends ConsumerWidget {
                       descripcion: descripcion,
                       tipoDeMoneda: tipoDeMoneda,
                       monto: monto,
-                      categoria: categoria, id: '',
+                      categoria: categoria,
                   
                     );
                     ref.read(agregarTransaccionProvider(ingreso));
