@@ -8,6 +8,7 @@ class Transaccion {
   final String tipoDeMoneda;
   final double monto;
   final String categoria;
+  final String userId;
 
   Transaccion({
     String? id, // ID opcional en el constructor
@@ -15,7 +16,8 @@ class Transaccion {
     required this.tipoDeMoneda,
     required this.monto,
     required this.categoria,
-  }) : id = id ?? Uuid().v4();
+    required this.userId,
+  }) : id = id ?? const Uuid().v4();
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -23,6 +25,7 @@ class Transaccion {
       'tipoDeMoneda': tipoDeMoneda,
       'monto': monto,
       'categoria': categoria,
+      'userId': userId,
     };
   }
 
@@ -33,6 +36,7 @@ class Transaccion {
       tipoDeMoneda: data['tipoDeMoneda'] ?? '',
       monto: (data['monto'] ?? 0).toDouble(), // Asegura que sea double
       categoria: data['categoria'] ?? '',
+      userId: data['userId'] ?? '',
     );
   }
 }

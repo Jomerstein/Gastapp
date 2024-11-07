@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gastapp/core/models/categoria.dart';
+import 'package:gastapp/presentations/components/navbar.dart';
 import 'package:gastapp/presentations/providers/consultas_providers.dart';
 import 'package:gastapp/presentations/providers/gastos_ingresos_provider.dart';
 import 'package:go_router/go_router.dart';
@@ -109,16 +110,19 @@ class ConsultasScreen extends ConsumerWidget {
               controller: descripcionController,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
+               
               ),
+              onChanged: (value){
+                ref.read(descripcionSeleccionadaProvider.notifier).state = value;
+              },
             ),
             const SizedBox(height: 16),
             Align(
               alignment: Alignment.center,
               child: ElevatedButton(
                 onPressed: () {
-                 context.pushNamed('listado', pathParameters: {
-                    'descripcion': descripcionController.text
-                  });
+                 context.pushNamed('listado',
+                  );
              
                 },
                 
@@ -132,8 +136,9 @@ class ConsultasScreen extends ConsumerWidget {
             ),
             Align(
               child: ElevatedButton(onPressed: ()=>{
-                  ref.watch(tipoSeleccionadoProvider.notifier).state = null,
-                  ref.watch(categoriaSeleccionadaConsultaProvider.notifier).state = null
+                  ref.read(tipoSeleccionadoProvider.notifier).state = null,
+                  ref.read(categoriaSeleccionadaConsultaProvider.notifier).state = null,
+                  ref.read(descripcionSeleccionadaProvider.notifier).state = null
 
               },
               child: const Text('Clear')), ),
@@ -142,7 +147,7 @@ class ConsultasScreen extends ConsumerWidget {
         ),
       
       ),
-      
+       bottomNavigationBar: const Navbar(),
     );
 
     

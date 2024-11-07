@@ -1,4 +1,7 @@
+import 'dart:ui';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gastapp/core/models/categoria.dart';
 import 'package:gastapp/core/models/gasto.dart';
 import 'package:gastapp/core/models/transaccion.dart';
@@ -8,10 +11,15 @@ class IngresoRepository {
   final FirebaseFirestore _firestore;
 
   IngresoRepository(this._firestore);
- Future<List<Ingreso>> getIngresos(String? descripcion, String? categoria) async {
+Stream<List<Ingreso>>? getIngresos(String? descripcion, String? categoria)  {
   try {
-    
+
     Query<Map<String, dynamic>> query = _firestore.collection("Ingresos");
+
+    User? user = FirebaseAuth.instance.currentUser;
+    if(user != null){
+      query = query.where('userId', isEqualTo: user.email);
+    }
 
     if (categoria != null) {
       query = query.where('categoria', isEqualTo: categoria);
@@ -22,47 +30,51 @@ class IngresoRepository {
       print("Entro descripcion");
     }
 
+    final snapshot =  query.snapshots();
 
-    final snapshot = await query.get();
 
-    // Procesa y devuelve los resultados
-    final ingresos = snapshot.docs.map((doc) {
-      return Ingreso.fromMap(doc.data() as Map<String, dynamic>);
-    }).toList();
-
-    return ingresos;
+    final ingreso = snapshot.map((snapshot) {
+      return snapshot.docs.map((doc) {
+        return Ingreso.fromSnapshot(doc.data()); 
+      }).toList();
+    });
+    return ingreso;
   } catch (e) {
-    print('Error en la consulta: $e');
-    return [];
+
+     return null;
   }
 }
 
-  Future<List<Gasto>> getGastos(String? descripcion, String? categoria) async {
+  Stream<List<Gasto>>? getGastos(String? descripcion, String? categoria)  {
   try {
 
     Query<Map<String, dynamic>> query = _firestore.collection("Gastos");
+    User? user = FirebaseAuth.instance.currentUser;
+    if(user != null){
+      query = query.where('userId', isEqualTo: user.email);
+    }
 
   
     if (categoria != null) {
       query = query.where('categoria', isEqualTo: categoria);
-      print("Entro categoria");
     }
     if (descripcion != null) {
       query = query.where('descripcion', isEqualTo: descripcion);
-      print("Entro descripcion");
+     
     }
 
-    final snapshot = await query.get();
+    final snapshot =  query.snapshots();
 
 
-    final gastos = snapshot.docs.map((doc) {
-      return Gasto.fromMap(doc.data() as Map<String, dynamic>);
-    }).toList();
-
+    final gastos = snapshot.map((snapshot) {
+      return snapshot.docs.map((doc) {
+        return Gasto.fromSnapshot(doc.data()); 
+      }).toList();
+    });
     return gastos;
   } catch (e) {
-    print('Error en la consulta: $e');
-    return []; // Retorna una lista vacía si hay un error
+
+     return null;
   }
 }
 
@@ -79,17 +91,18 @@ class IngresoRepository {
         .collection('Gastos')
         .where('id', isEqualTo: transaccion.id) // Cambiar esto a id
         .get();
-        print(transaccion.id);
+        
       }
    
 
     // Borrar cada documento encontrado
     for (var doc in querySnapshot.docs) {
       await doc.reference.delete();
+      print("no anda negrazo");
     }
-    print('Ingreso(s) eliminado(s) correctamente');
+  
   } catch (e) {
-    print('Error al eliminar el ingreso: $e');
+  print("elloco");
   }
 }
   
@@ -109,7 +122,9 @@ class IngresoRepository {
   }
   
   Stream<List<Categoria>> getCategorias() {
-  return _firestore.collection('Categorias').snapshots().map((snapshot) =>
+  return _firestore.collection('Categorias').
+    where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.email).
+    snapshots().map((snapshot) =>
       snapshot.docs.map((doc) => Categoria.fromMap(doc.data())).toList());
 }
 

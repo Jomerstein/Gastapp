@@ -1,8 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gastapp/core/models/categoria.dart';
 import 'package:gastapp/core/models/gasto.dart';
 import 'package:gastapp/core/models/ingreso.dart';
+import 'package:gastapp/presentations/components/mensaje_pop.dart';
+import 'package:gastapp/presentations/components/navbar.dart';
 import 'package:gastapp/presentations/providers/gastos_ingresos_provider.dart';
 
 
@@ -16,11 +19,8 @@ class GastosIngresosScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final categorias = ref.watch(getCategoriasProvider);
-    
-
   
-  
-    return Scaffold(
+     return Scaffold(
       appBar: AppBar(
         title: const Text(
           'Ingresos',
@@ -90,9 +90,13 @@ class GastosIngresosScreen extends ConsumerWidget {
             const SizedBox(height: 8),
             TextField(
               controller: descripcionController,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-              ),
+               decoration: InputDecoration(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12)
+        ),
+      
+        hintStyle: const TextStyle(color: Colors.grey)
+      ),
              onChanged: (stri)=>{
               ref.read(descripcionProvider.notifier).state = stri
              },             ),
@@ -109,18 +113,24 @@ class GastosIngresosScreen extends ConsumerWidget {
               onChanged: (value) {
                 ref.read(monedaSeleccionadaProvider.notifier).state = value;
               },
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-              ),
+                decoration: InputDecoration(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12)
+        ),
+       
+        hintStyle: const TextStyle(color: Colors.grey)
+      ),
             ),
             const SizedBox(height: 16),
             const Text('MONTO'),
             const SizedBox(height: 8),
             TextField(
               controller: montoController,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 prefixText: '\$',
-                border: OutlineInputBorder(),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
               ),
               keyboardType: TextInputType.number,
               onChanged: (value)=>{
@@ -134,8 +144,14 @@ class GastosIngresosScreen extends ConsumerWidget {
               children: [
                 categorias.when(
                   data: (categorias) {
+                      if(categorias.isEmpty){
+                        // hacer la card modularizada 
+                          return Card(child: Text("NoHay"),);
+                        }
                     return DropdownButtonFormField<String>(
+                      
                       items: categorias.map((categoria) {
+                      
                         return DropdownMenuItem<String>(
                           value: categoria.nombreCategoria,
                           child: Text(categoria.nombreCategoria),
@@ -144,14 +160,17 @@ class GastosIngresosScreen extends ConsumerWidget {
                       onChanged: (value) {
                         ref.read(categoriaSeleccionadaProvider.notifier).state = value;
                       },
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
+                      decoration:  InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12)
+                        ),
                       ),
                     );
                   },
                   loading: () => const Center(child: CircularProgressIndicator()),
                   error: (error, stack) => Text('Error: $error'),
                 ),
+                const SizedBox(height: 25,),
                 ElevatedButton(
                   onPressed: () => _showFormularioDialog(context, ref), // Llama a la función para mostrar el diálogo
                       child: const Text('Agregar categoría'),
@@ -159,7 +178,7 @@ class GastosIngresosScreen extends ConsumerWidget {
               ],
               
             ),
-            const SizedBox(height: 16,),
+
             
             
               const Spacer(),
@@ -173,6 +192,7 @@ class GastosIngresosScreen extends ConsumerWidget {
           ],
         ),
       ),
+      bottomNavigationBar: const Navbar(),
     );
   }
   
@@ -207,7 +227,7 @@ void _showFormularioDialog(BuildContext context, WidgetRef ref) {
           TextButton(
             onPressed: () {
               String nombreCategoria = nombreController.text;
-              Categoria categoria = Categoria(id: "", nombreCategoria: nombreCategoria);
+              Categoria categoria = Categoria(id: "", nombreCategoria: nombreCategoria, userId: FirebaseAuth.instance.currentUser!.email ?? "");
               ref.read(agregarCategoriaProvider(categoria));
               
               Navigator.of(context).pop(); // Cierra el diálogo
@@ -244,13 +264,17 @@ class _BotonTransaccion extends ConsumerWidget {
                   String categoria = ref.read(categoriaSeleccionadaProvider.notifier).state.toString();
                   double monto  = ref.read(montoProvider.notifier).state.toDouble();
                   String descripcion = ref.read(descripcionProvider.notifier).state.toString();
-            
+                  User? currentUser = FirebaseAuth.instance.currentUser;
+                  if(currentUser != null){
+                    
+                  
                   if(ref.read(tipoTransaccionProvider.notifier).state == "Gasto"){
                     Gasto gasto = Gasto(
                       descripcion: descripcion,
                       tipoDeMoneda: tipoDeMoneda,
                       monto: monto,
-                      categoria: categoria
+                      categoria: categoria,
+                      userId: currentUser.email!,
                     );
                     ref.read(agregarTransaccionProvider(gasto));
                   }else{
@@ -259,13 +283,15 @@ class _BotonTransaccion extends ConsumerWidget {
                       tipoDeMoneda: tipoDeMoneda,
                       monto: monto,
                       categoria: categoria,
+                      userId: currentUser.email!,
                   
                     );
                     ref.read(agregarTransaccionProvider(ingreso));
                   }
+                }
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
+                  backgroundColor: Colors.grey,
                   padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
                 ),
                 child: const Text('Agregar transacción'),

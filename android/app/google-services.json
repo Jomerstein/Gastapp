@@ -2,7 +2,7 @@
   "project_info": {
     "project_number": "1050952478395",
     "project_id": "gastapp-847f9",
-    "storage_bucket": "gastapp-847f9.appspot.com"
+    "storage_bucket": "gastapp-847f9.firebasestorage.app"
   },
   "client": [
     {

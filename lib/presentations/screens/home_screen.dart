@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gastapp/presentations/components/home_button.dart';
+import 'package:gastapp/presentations/components/navbar.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -33,10 +35,12 @@ class HomeScreen extends StatelessWidget {
             const HomeButton(color:Color.fromARGB(204, 255, 59, 48) ,textContent:  'Gastos / Ingresos', route:  'gastosingresos'),
             const SizedBox(height: 50),
             const HomeButton(color:Color.fromARGB(204, 48, 131, 255),textContent:  'Consultas', route:  'consultas'), 
-          
+            
+            
           ],
         ),
-      )
+      ),
+      bottomNavigationBar: Navbar(),
     );
   }
 }
