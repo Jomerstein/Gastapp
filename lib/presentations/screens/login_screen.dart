@@ -24,6 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
      try{
       //validar aca porque denuevo si esta mal hasta la contraseña esto no funca
       await FirebaseAuth.instance.signInWithEmailAndPassword(email: emailController.text, password: passwordController.text);
+      
       if(context.mounted){
         context.pop();
           context.pushNamed("auth");
@@ -31,7 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
      } 
      on FirebaseAuthException catch(e){
         context.pop();
-        mensajePop(e.toString(), context, false);
+        mensajePop(e.message, context, false);
        
      } on PlatformException catch (e) {
 

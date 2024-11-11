@@ -9,6 +9,7 @@ class Transaccion {
   final double monto;
   final String categoria;
   final String userId;
+  final DateTime fecha;
 
   Transaccion({
     String? id, // ID opcional en el constructor
@@ -17,6 +18,7 @@ class Transaccion {
     required this.monto,
     required this.categoria,
     required this.userId,
+    required this.fecha,
   }) : id = id ?? const Uuid().v4();
   Map<String, dynamic> toMap() {
     return {
@@ -26,6 +28,7 @@ class Transaccion {
       'monto': monto,
       'categoria': categoria,
       'userId': userId,
+      'fecha': fecha,
     };
   }
 
@@ -37,6 +40,7 @@ class Transaccion {
       monto: (data['monto'] ?? 0).toDouble(), // Asegura que sea double
       categoria: data['categoria'] ?? '',
       userId: data['userId'] ?? '',
+      fecha: data['fecha'] ?? '',
     );
   }
 }

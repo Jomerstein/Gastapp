@@ -84,9 +84,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
               const SizedBox(height: 20),
               TextFieldAuth(hintText: "Repita su contraseña", isPass: true, textEditingController: passwordConfirmController),
               const SizedBox(height: 4),
-              SizedBox(height: 40,),
+              const SizedBox(height: 40,),
               SendButton(text: "Registrate", color: Colors.grey, funcion: register,),
-              SizedBox(height: 20,),
+              const SizedBox(height: 20,),
                Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

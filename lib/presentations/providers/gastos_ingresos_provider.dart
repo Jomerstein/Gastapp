@@ -13,15 +13,10 @@ final descripcionProvider = StateProvider<String?>((ref) => null);
 final montoProvider = StateProvider<double>((ref) => 0);
 final categoriaSeleccionadaProvider = StateProvider<String?>((ref)=> null);
 final selectedDateProvider = StateProvider<DateTime?>((ref) => null);
-// Define un FutureProvider para cargar las categorías
+
 final getCategoriasProvider = StreamProvider<List<Categoria>>((ref) {
   final repository = IngresoRepository(ref.watch(firebaseFirestoreProvider));
   return repository.getCategorias();
-});
-
-final getCategoriasFutureProvider = FutureProvider<List<Categoria>>((ref) async {
-  final repository = IngresoRepository(ref.watch(firebaseFirestoreProvider));
-  return await repository.getCategorias().first; // Obtener solo el primer valor del Stream
 });
 
 
@@ -39,6 +34,7 @@ final agregarCategoriaProvider = FutureProvider.autoDispose.family<void, Categor
   
   return repository.addCategoria(categoria); 
 });
+
 
 
 

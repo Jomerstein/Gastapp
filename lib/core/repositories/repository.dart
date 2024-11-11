@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gastapp/core/models/categoria.dart';
@@ -11,7 +9,7 @@ class IngresoRepository {
   final FirebaseFirestore _firestore;
 
   IngresoRepository(this._firestore);
-Stream<List<Ingreso>>? getIngresos(String? descripcion, String? categoria)  {
+  Stream<List<Ingreso>>? getIngresos(String? descripcion, String? categoria)  {
   try {
 
     Query<Map<String, dynamic>> query = _firestore.collection("Ingresos");
@@ -23,11 +21,10 @@ Stream<List<Ingreso>>? getIngresos(String? descripcion, String? categoria)  {
 
     if (categoria != null) {
       query = query.where('categoria', isEqualTo: categoria);
-      print("Entro categoria");
+
     }
     if (descripcion != null) {
       query = query.where('descripcion', isEqualTo: descripcion);
-      print("Entro descripcion");
     }
 
     final snapshot =  query.snapshots();
@@ -98,11 +95,11 @@ Stream<List<Ingreso>>? getIngresos(String? descripcion, String? categoria)  {
     // Borrar cada documento encontrado
     for (var doc in querySnapshot.docs) {
       await doc.reference.delete();
-      print("no anda negrazo");
+      
     }
   
   } catch (e) {
-  print("elloco");
+ 
   }
 }
   
@@ -111,7 +108,6 @@ Stream<List<Ingreso>>? getIngresos(String? descripcion, String? categoria)  {
   Future<void> addTransaccion(Transaccion transaccion) async {
     if(transaccion is Ingreso){
      await _firestore.collection('Ingresos').add(transaccion.toMap());
-      
     }else{
       await _firestore.collection('Gastos').add(transaccion.toMap());
     }

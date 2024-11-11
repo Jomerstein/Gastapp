@@ -19,9 +19,12 @@ class ProfileScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
-    final usersRepository = ref.watch(userRepositoryProvider);
     final categorias = ref.watch(getCategoriasProvider.stream);
+    final usersRepository = ref.watch(userRepositoryProvider);
+     Future.delayed(Duration.zero, () {
+     ref.refresh(getCategoriasProvider);  
+  });
+
     void cerrarSesion(){
         FirebaseAuth.instance.signOut();
         context.goNamed("login");
@@ -31,7 +34,7 @@ return Scaffold(
   appBar: null,
   body: Center(
     child: Padding(
-      padding: const EdgeInsets.all(16.0), // Agregamos un padding alrededor
+      padding: const EdgeInsets.all(16.0), 
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -89,6 +92,7 @@ return Scaffold(
             },
           ),
           SizedBox(height: 30,),
+          
             StreamBuilder<List<Categoria>>(stream: categorias, builder: (context, snapshot){
                 if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
@@ -101,7 +105,7 @@ return Scaffold(
         }
 
         final categorias = snapshot.data!;
-        return Expanded(
+        return Flexible(
           child: ListView.builder(
             itemCount: categorias.length,
             itemBuilder: (context, index) {

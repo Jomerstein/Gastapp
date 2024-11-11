@@ -2,7 +2,7 @@
 import 'package:gastapp/core/models/transaccion.dart';
 
 class Ingreso extends Transaccion {
-  Ingreso({required super.descripcion, required super.tipoDeMoneda, required super.monto, required super.categoria, super.id, required super.userId,});
+  Ingreso({required super.descripcion, required super.tipoDeMoneda, required super.monto, required super.categoria, super.id, required super.userId, required super.fecha,});
   
     factory Ingreso.fromMap(Map<String, dynamic> data) {
     return Ingreso(
@@ -12,6 +12,7 @@ class Ingreso extends Transaccion {
       monto: (data['monto'] ?? 0).toDouble(), // Asegura que sea double
       categoria: data['categoria'] ?? '',
       userId: data['userId'] ?? '',
+      fecha: data['fehca'] ?? ','
     );
   }
       factory Ingreso.fromSnapshot(Map<String, dynamic> json) {
@@ -23,6 +24,7 @@ class Ingreso extends Transaccion {
       tipoDeMoneda: json['tipoDeMoneda'] as String,
       categoria: json['categoria'] as String,
       userId: json['userId'] as String,
+      fecha: json['fecha'] as DateTime,
     );
   }
 
