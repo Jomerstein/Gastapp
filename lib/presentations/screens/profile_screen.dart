@@ -5,6 +5,7 @@ import 'package:gastapp/core/models/categoria.dart';
 import 'package:gastapp/core/models/usuario.dart';
 import 'package:gastapp/core/repositories/user_repository.dart';
 import 'package:gastapp/core/router/app_router.dart';
+import 'package:gastapp/presentations/components/categoria_card.dart';
 import 'package:gastapp/presentations/components/navbar.dart';
 import 'package:gastapp/presentations/components/send_button.dart';
 import 'package:gastapp/presentations/providers/firebase.provider.dart';
@@ -12,7 +13,7 @@ import 'package:gastapp/presentations/providers/gastos_ingresos_provider.dart';
 import 'package:go_router/go_router.dart';
 
 class ProfileScreen extends ConsumerWidget {
-   ProfileScreen({super.key});
+   const ProfileScreen({super.key});
   
 
 
@@ -31,13 +32,13 @@ class ProfileScreen extends ConsumerWidget {
     }
     
 return Scaffold(
-  appBar: null,
+  
   body: Center(
     child: Padding(
       padding: const EdgeInsets.all(16.0), 
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
+        
         children: [
           const Text(
             "Nombre de usuario",
@@ -92,6 +93,8 @@ return Scaffold(
             },
           ),
           SizedBox(height: 30,),
+          const Text("Categorias", style: TextStyle(fontSize: 30, fontStyle: FontStyle.italic),),
+          SizedBox(height: 30,),
           
             StreamBuilder<List<Categoria>>(stream: categorias, builder: (context, snapshot){
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -109,14 +112,13 @@ return Scaffold(
           child: ListView.builder(
             itemCount: categorias.length,
             itemBuilder: (context, index) {
-              return ListTile(
-                title: Text(categorias[index].nombreCategoria),
-              );
+              return CategoriaCard(titulo: categorias[index].nombreCategoria);
             },
           ),
         );
       },
             ),
+           const  Spacer(),
           SendButton(text: "Cerrar Sesión", color: Colors.grey, funcion: cerrarSesion,)
         ],
       ),

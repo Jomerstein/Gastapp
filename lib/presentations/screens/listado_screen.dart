@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gastapp/core/models/transaccion.dart';
 import 'package:gastapp/core/repositories/repository.dart';
+import 'package:gastapp/presentations/components/mensaje_pop.dart';
 import 'package:gastapp/presentations/components/navbar.dart';
 import 'package:gastapp/presentations/providers/consultas_providers.dart';
 import 'package:gastapp/presentations/providers/firebase.provider.dart';
@@ -24,20 +25,18 @@ class ListadoScreen extends ConsumerWidget {
     final tipo = ref.watch(tipoSeleccionadoProvider.notifier).state;
     final categoria = ref.watch(categoriaSeleccionadaConsultaProvider.notifier).state;
     final descripcion = ref.watch(descripcionSeleccionadaProvider.notifier).state;
+    if(descripcion != null){
+        
 
+
+    }
     if(tipo == "Gasto"){
-      return repository.getGastos(descripcion, categoria);
+      return repository.getGastos(descripcion, categoria, null);
     }else{
       return repository.getIngresos(descripcion, categoria);
     }
 
-  }
-      
- 
-
-
-
-    return  Scaffold(
+  }  return  Scaffold(
       body: StreamBuilder(stream: getTransacciones(), builder: (context,snapshot){
           if(snapshot.connectionState == ConnectionState.waiting){
               return const Center(
@@ -47,12 +46,10 @@ class ListadoScreen extends ConsumerWidget {
           final transacciones = snapshot.data;
 
           if(transacciones!.isEmpty || snapshot.data == null){
-              return const Center(
-                  child: Padding(
-                      padding: EdgeInsets.all(25),
-                      child: Text("No hay transaccione"),
-                      ),
-              );
+             WidgetsBinding.instance.addPostFrameCallback((_) {
+            mensajePop('No se encontraron transacciones', context, false);
+            });
+            return const SizedBox.shrink();
           }
           return ListView.builder(
               itemCount: transacciones.length,

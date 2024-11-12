@@ -2,20 +2,19 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gastapp/core/repositories/user_repository.dart';
 import 'package:gastapp/presentations/components/mensaje_pop.dart';
 import 'package:gastapp/presentations/components/send_button.dart';
 import 'package:gastapp/presentations/components/text_field_auth.dart';
+import 'package:gastapp/presentations/providers/login_register_provider.dart';
 import 'package:go_router/go_router.dart';
 
-class RegisterScreen extends StatefulWidget {
+class RegisterScreen extends ConsumerWidget {
   RegisterScreen({super.key});
 
-  @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
-}
 
-class _RegisterScreenState extends State<RegisterScreen> {
+
   TextEditingController emailController = TextEditingController();
 
   TextEditingController passwordController = TextEditingController();
@@ -24,7 +23,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   TextEditingController usernameController = TextEditingController();
 
-  void register() async{
+  
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    
+    void register() async{
     showDialog(context: context, builder: (context)=> const Center(child: CircularProgressIndicator(),));
 
     if(passwordConfirmController.text != passwordController.text){
@@ -36,30 +40,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
     
     UserRepository repository = UserRepository();
     try{
-      // hacer validaciones porque por algun motivo no cachea algunos errores
-      UserCredential? user = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: emailController.text, password: passwordController.text);
-      repository.addUser(user, usernameController.text);
+      ref.read(registerProvider(RegisterParams(usernameController.text, email: emailController.text, password: passwordConfirmController.text)));
       Navigator.pop(context);
       context.pushNamed("auth");
-      
-      
     } on FirebaseAuthException catch(e){
          GoRouter.of(context).pop();
         mensajePop(e.toString(), context, false);
-        
     } on PlatformException catch (e){
        GoRouter.of(context).pop();
       mensajePop(e.toString(), context, false);
-     
     }catch(e){
 
     }
     }
   
   }
-
-  @override
-  Widget build(BuildContext context) {
+    
+    
     return Scaffold(
       body: Center(
         child: Padding(

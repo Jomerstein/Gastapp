@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gastapp/core/models/categoria.dart';
 import 'package:gastapp/core/models/gasto.dart';
 import 'package:gastapp/core/models/transaccion.dart';
+
 import '../models/ingreso.dart';
 
 class IngresoRepository {
@@ -42,7 +43,7 @@ class IngresoRepository {
   }
 }
 
-  Stream<List<Gasto>>? getGastos(String? descripcion, String? categoria)  {
+  Stream<List<Gasto>>? getGastos(String? descripcion, String? categoria, DateTime? fecha)  {
   try {
 
     Query<Map<String, dynamic>> query = _firestore.collection("Gastos");
@@ -55,7 +56,7 @@ class IngresoRepository {
     if (categoria != null) {
       query = query.where('categoria', isEqualTo: categoria);
     }
-    if (descripcion != null) {
+    if (descripcion != null && descripcion.isNotEmpty) {
       query = query.where('descripcion', isEqualTo: descripcion);
      
     }
@@ -99,7 +100,7 @@ class IngresoRepository {
     }
   
   } catch (e) {
- 
+    
   }
 }
   
@@ -123,9 +124,25 @@ class IngresoRepository {
     snapshots().map((snapshot) =>
       snapshot.docs.map((doc) => Categoria.fromMap(doc.data())).toList());
 }
+  Future<void> deleteCategoria(String nombreCategoria) async{
+    try {
+      final QuerySnapshot<Map<String, dynamic>> querySnapshot;
 
+        querySnapshot = await FirebaseFirestore.instance
+        .collection('Categorias')
+        .where('NombreCategoria', isEqualTo: nombreCategoria)
+        .get();
+        
+         for (var doc in querySnapshot.docs) {
+        await doc.reference.delete();
+      
+    }
 
-
-
+      
+      }catch(e){
+        print("No se elimino la categoria");
+      }
+    
+  }
 }
 

@@ -1,4 +1,5 @@
 import 'package:gastapp/core/auth/auth.dart';
+import 'package:gastapp/presentations/screens/balance_screen.dart';
 import 'package:gastapp/presentations/screens/consultas_screen.dart';
 import 'package:gastapp/presentations/screens/gastos_ingresos_screen.dart';
 import 'package:gastapp/presentations/screens/home_screen.dart';
@@ -17,17 +18,10 @@ final GoRouter appRouter = GoRouter(
     GoRoute(name: "home", path: '/home', builder: (context, state)=>  const HomeScreen()),
     GoRoute(name:'gastosingresos',path: '/gastosingresos', builder: (context, state) =>  GastosIngresosScreen()),
     GoRoute(name:'consultas',path: '/consultas', builder: (context, state) => const  ConsultasScreen()),
-    GoRoute(
-    name: 'listado',
-    path: '/listado', // Define el parámetro :id en la ruta
-    builder: (context, state) {
-    // Accede al parámetro usando state.params
-   // final descripcion = state.pathParameters['descripcion']!;
-    return const ListadoScreen(); // Pasa el parámetro al widget
-  },
-),
+    GoRoute(name: 'listado',path: '/listado', builder: (context, state) =>  const ListadoScreen()), 
     GoRoute(path: "/register", name: "register", builder:(context, state) => RegisterScreen(),),
-    GoRoute(path: "/login", name: "login", builder:(context, state) => const LoginScreen(),)
+    GoRoute(path: "/login", name: "login", builder:(context, state) =>  LoginScreen(),),
+    GoRoute(path: "/balance", name: "balance", builder:(context, state) => const BalanceScreen(),),
    
     
   ]

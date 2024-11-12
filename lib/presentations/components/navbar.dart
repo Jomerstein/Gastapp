@@ -20,7 +20,7 @@ class _NavbarState extends State<Navbar> {
         context.pushNamed('home');
         break;
       case 1:
-        context.pushNamed('home');
+        context.pushNamed('balance');
         break;
       case 2:
         context.pushNamed('profile');

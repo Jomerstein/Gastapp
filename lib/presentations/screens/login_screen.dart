@@ -1,30 +1,31 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gastapp/presentations/components/mensaje_pop.dart';
 import 'package:gastapp/presentations/components/send_button.dart';
 import 'package:gastapp/presentations/components/text_field_auth.dart';
+import 'package:gastapp/presentations/providers/login_register_provider.dart';
 import 'package:go_router/go_router.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class LoginScreen extends ConsumerWidget {
+   LoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
-}
 
-class _LoginScreenState extends State<LoginScreen> {
   TextEditingController emailController = TextEditingController();
 
   TextEditingController passwordController = TextEditingController();
 
-  void login()async {
+ 
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+     void login()async {
      showDialog(context: context, builder: (context)=> const Center(child: CircularProgressIndicator(),));
 
      try{
-      //validar aca porque denuevo si esta mal hasta la contraseña esto no funca
-      await FirebaseAuth.instance.signInWithEmailAndPassword(email: emailController.text, password: passwordController.text);
-      
+      ref.read(loginProvider(LoginParams(email: emailController.text, password: passwordController.text)));
       if(context.mounted){
         context.pop();
           context.pushNamed("auth");
@@ -44,9 +45,6 @@ class _LoginScreenState extends State<LoginScreen> {
       print(e.toString());
      }
   }
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: Padding(

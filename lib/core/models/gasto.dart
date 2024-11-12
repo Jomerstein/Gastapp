@@ -1,4 +1,5 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gastapp/core/models/transaccion.dart';
 
 class Gasto extends Transaccion {
@@ -26,7 +27,7 @@ class Gasto extends Transaccion {
       tipoDeMoneda: json['tipoDeMoneda'] as String,
       categoria: json['categoria'] as String,
       userId: json['userId'] as String,
-      fecha: json['fecha'] as DateTime,
+      fecha: (json['fecha'] as Timestamp).toDate(),
     );
   }
 

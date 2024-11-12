@@ -6,7 +6,8 @@ import 'package:gastapp/core/models/gasto.dart';
 import 'package:gastapp/core/models/ingreso.dart';
 import 'package:gastapp/presentations/components/navbar.dart';
 import 'package:gastapp/presentations/providers/gastos_ingresos_provider.dart';
-import 'package:scroll_date_picker/scroll_date_picker.dart';
+import 'package:go_router/go_router.dart';
+
 
 
 
@@ -183,7 +184,13 @@ class GastosIngresosScreen extends ConsumerWidget {
                       data: (categorias) {
                           if(categorias.isEmpty){
                             // hacer la card modularizada 
-                              return Card(child: Text("NoHay"),);
+                              return const Center(
+                                
+                                child: Card(
+                                  
+                                  child: Text("No hay categorías"),
+                                ),
+                              );
                             }
                         return DropdownButtonFormField<String>(
                           
@@ -217,17 +224,11 @@ class GastosIngresosScreen extends ConsumerWidget {
                   ],
                   
                 ),
-                    
-                
-                
                 const Spacer(),
-                
-                
                 const Align(
                   alignment: Alignment.center,
                   child: _BotonTransaccion(),
                   )
-               
               ],
             ),
           ),
@@ -262,7 +263,7 @@ void _showFormularioDialog(BuildContext context, WidgetRef ref) {
                   labelText: 'Nombre de la categoría',
                 ),
               ),
-              // Puedes añadir más campos según sea necesario
+         
             ],
           ),
         ),
@@ -273,7 +274,7 @@ void _showFormularioDialog(BuildContext context, WidgetRef ref) {
               Categoria categoria = Categoria(id: "", nombreCategoria: nombreCategoria, userId: FirebaseAuth.instance.currentUser!.email ?? "");
               ref.read(agregarCategoriaProvider(categoria));
               
-              Navigator.of(context).pop(); // Cierra el diálogo
+              Navigator.of(context).pop(); 
             },
             child: const Text('Enviar'),
           ),
@@ -301,6 +302,14 @@ class _BotonTransaccion extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    void clear(){
+                ref.read(monedaSeleccionadaProvider.notifier).state = null;
+                ref.read(categoriaSeleccionadaProvider.notifier).state = null;
+                ref.read(montoProvider.notifier).state = 0;
+                ref.read(descripcionProvider.notifier).state == null;
+                ref.read(selectedDateProvider.notifier).state = null;
+    }
+
     return ElevatedButton(
                 onPressed: () {
                   String tipoDeMoneda = ref.read(monedaSeleccionadaProvider.notifier).state.toString();
@@ -321,7 +330,20 @@ class _BotonTransaccion extends ConsumerWidget {
                       userId: currentUser.email!,
                       fecha: fecha!,
                     );
-                    ref.read(agregarTransaccionProvider(gasto));
+                    ref.read(agregarTransaccionProvider(gasto).future)
+            .then((_) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("Transacción agregada exitosamente")),
+              );
+
+              clear();
+              context.go('/home');
+            })
+            .catchError((error) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text("Error al agregar la transacción: $error")),
+              );
+            });
                   }else{
                     Ingreso ingreso = Ingreso(
                       descripcion: descripcion,
@@ -332,7 +354,23 @@ class _BotonTransaccion extends ConsumerWidget {
                       fecha: fecha!,
                   
                     );
-                    ref.read(agregarTransaccionProvider(ingreso));
+                    ref.read(agregarTransaccionProvider(ingreso).future)
+            .then((_) {
+              // Muestra el mensaje de éxito
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text("Transacción agregada exitosamente")),
+              );
+
+              clear();
+              context.go('/home');
+            })
+            .catchError((error) {
+              // Muestra un mensaje de error si la operación falló
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text("Error al agregar la transacción: $error")),
+              );
+            });
+                    
                   }
                 }
                 },
@@ -342,6 +380,7 @@ class _BotonTransaccion extends ConsumerWidget {
                 ),
                 child: const Text('Agregar transacción'),
               );
+           
             
   }
 }
