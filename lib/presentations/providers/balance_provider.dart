@@ -4,16 +4,27 @@ import 'package:gastapp/presentations/providers/firebase.provider.dart';
 
 final getGastosProvider = StreamProvider.family<double, String?>((ref, categoria) {
   IngresoRepository repositoy = IngresoRepository(ref.read(firebaseFirestoreProvider));
- return repositoy.getGastos(null, categoria, null)?.map((gastos){
+  final gastos = repositoy.getGastos(null, categoria, null);
+  if(gastos == null){
+   return const Stream.empty();
+  }else{
+    return  gastos.map((gastos){
     return gastos.fold(0.0, (total, gasto)=> total + gasto.monto);
-  })
-  ?? const Stream.empty();
+  });
+  }
+  
+ 
 });
 
 final getIngresosProvider = StreamProvider.family<double, String?>((ref, categoria) {
   IngresoRepository repositoy = IngresoRepository(ref.read(firebaseFirestoreProvider));
- return repositoy.getIngresos(null, categoria)?.map((gastos){
-    return gastos.fold(0.0, (total, gasto)=> total + gasto.monto);
-  })
-  ?? const Stream.empty();
+  final ingresos = repositoy.getIngresos(null, categoria, null);
+
+  if(ingresos == null){
+    return const Stream.empty();
+  }else{
+    return  ingresos.map((ingresos){
+    return ingresos.fold(0.0, (total, ingreso)=> total + ingreso.monto);
+  });
+  }
 });

@@ -9,18 +9,19 @@ import 'package:gastapp/presentations/providers/login_register_provider.dart';
 import 'package:go_router/go_router.dart';
 
 class LoginScreen extends ConsumerWidget {
-   LoginScreen({super.key});
+  const  LoginScreen({super.key});
 
-  @override
 
-  TextEditingController emailController = TextEditingController();
 
-  TextEditingController passwordController = TextEditingController();
 
  
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    
+  TextEditingController emailController = TextEditingController();
+
+  TextEditingController passwordController = TextEditingController();
      void login()async {
      showDialog(context: context, builder: (context)=> const Center(child: CircularProgressIndicator(),));
 
@@ -42,7 +43,7 @@ class LoginScreen extends ConsumerWidget {
 
 
      }catch(e){
-      print(e.toString());
+      
      }
   }
     return Scaffold(

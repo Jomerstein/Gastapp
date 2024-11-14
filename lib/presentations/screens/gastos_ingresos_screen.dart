@@ -237,13 +237,7 @@ class GastosIngresosScreen extends ConsumerWidget {
       bottomNavigationBar: const Navbar(),
     );
   }
-  
 }
-
-
-
-
-
 
 void _showFormularioDialog(BuildContext context, WidgetRef ref) {
   final TextEditingController nombreController = TextEditingController();
@@ -318,6 +312,13 @@ class _BotonTransaccion extends ConsumerWidget {
                   String descripcion = ref.read(descripcionProvider.notifier).state.toString();
                   DateTime? fecha = ref.read(selectedDateProvider.notifier).state;
                   User? currentUser = FirebaseAuth.instance.currentUser;
+                      if (tipoDeMoneda.isEmpty || categoria.isEmpty || descripcion.isEmpty || monto <= 0 || fecha == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                       const SnackBar(content: Text("Por favor, complete todos los campos.")),
+                        );
+                       return;
+                       }
+                  
                   if(currentUser != null){
                     
                   
@@ -328,7 +329,7 @@ class _BotonTransaccion extends ConsumerWidget {
                       monto: monto,
                       categoria: categoria,
                       userId: currentUser.email!,
-                      fecha: fecha!,
+                      fecha: fecha,
                     );
                     ref.read(agregarTransaccionProvider(gasto).future)
             .then((_) {
@@ -351,7 +352,7 @@ class _BotonTransaccion extends ConsumerWidget {
                       monto: monto,
                       categoria: categoria,
                       userId: currentUser.email!,
-                      fecha: fecha!,
+                      fecha: fecha,
                   
                     );
                     ref.read(agregarTransaccionProvider(ingreso).future)
@@ -379,9 +380,7 @@ class _BotonTransaccion extends ConsumerWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
                 ),
                 child: const Text('Agregar transacción'),
-              );
-           
-            
+              ); 
   }
 }
 

@@ -5,7 +5,7 @@ import 'package:gastapp/presentations/providers/firebase.provider.dart';
 
 final tipoSeleccionadoProvider = StateProvider<String?>((ref) => null);
 final categoriaSeleccionadaConsultaProvider = StateProvider<String?>((ref) => null);
-final anoSeleccionadoProvider = StateProvider<DateTime?>((ref) => null);
+final anioSeleccionadoProvider = StateProvider<DateTime?>((ref) => null);
 final descripcionSeleccionadaProvider = StateProvider<String?>((ref) => null);
 
 

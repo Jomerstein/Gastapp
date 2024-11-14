@@ -1,12 +1,11 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gastapp/core/models/transaccion.dart';
 import 'package:gastapp/core/repositories/repository.dart';
-import 'package:gastapp/presentations/components/mensaje_pop.dart';
 import 'package:gastapp/presentations/components/navbar.dart';
 import 'package:gastapp/presentations/providers/consultas_providers.dart';
 import 'package:gastapp/presentations/providers/firebase.provider.dart';
+import 'package:go_router/go_router.dart';
 
 class ListadoScreen extends ConsumerWidget {
   const ListadoScreen({super.key});
@@ -19,21 +18,17 @@ class ListadoScreen extends ConsumerWidget {
     Future<void> eliminarTransaccion(WidgetRef ref, Transaccion transaccion) async {
     await ref.read(borrarTransaccionFutureProvider(transaccion).future);
      }
-     //lo debería hacer un servicio?
+     //lo debería hacer un servicio? si lo debo pasar a riverpod
     Stream<List<Transaccion>>? getTransacciones(){ 
     final repository = IngresoRepository(ref.watch(firebaseFirestoreProvider));
     final tipo = ref.watch(tipoSeleccionadoProvider.notifier).state;
     final categoria = ref.watch(categoriaSeleccionadaConsultaProvider.notifier).state;
     final descripcion = ref.watch(descripcionSeleccionadaProvider.notifier).state;
-    if(descripcion != null){
-        
-
-
-    }
+    final anio = ref.watch(anioSeleccionadoProvider.notifier).state;
     if(tipo == "Gasto"){
-      return repository.getGastos(descripcion, categoria, null);
+      return repository.getGastos(descripcion, categoria, anio);
     }else{
-      return repository.getIngresos(descripcion, categoria);
+      return repository.getIngresos(descripcion, categoria, anio);
     }
 
   }  return  Scaffold(
@@ -47,7 +42,10 @@ class ListadoScreen extends ConsumerWidget {
 
           if(transacciones!.isEmpty || snapshot.data == null){
              WidgetsBinding.instance.addPostFrameCallback((_) {
-            mensajePop('No se encontraron transacciones', context, false);
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("No se encontraron transacciones")),
+              );
+            context.go("/consultas");
             });
             return const SizedBox.shrink();
           }
@@ -68,6 +66,7 @@ class ListadoScreen extends ConsumerWidget {
                       children: [
                         Text('Monto: ${transaccion.monto.toStringAsFixed(2)} ${transaccion.tipoDeMoneda}'),
                         Text('Categoría: ${transaccion.categoria}'),
+                        Text('Fecha: ${transaccion.fecha}' )
                       ],
                     ),
                     trailing: IconButton(

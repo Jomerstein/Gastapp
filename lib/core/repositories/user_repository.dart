@@ -19,7 +19,7 @@ class UserRepository{
 
   Future<Usuario?> getUser()async{
   User? user =   FirebaseAuth.instance.currentUser;
-  final snapshot;
+  dynamic snapshot;
     if(user != null){
     snapshot = await firebaseFirestore.collection("Users").where("email", isEqualTo: user.email).get();
       if(snapshot.docs.isNotEmpty){

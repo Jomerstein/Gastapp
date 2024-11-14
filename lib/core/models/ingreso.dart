@@ -7,13 +7,13 @@ class Ingreso extends Transaccion {
   
     factory Ingreso.fromMap(Map<String, dynamic> data) {
     return Ingreso(
-      id: data['id'], // El ID puede venir del mapa
+      id: data['id'], 
       descripcion: data['descripcion'] ?? '', 
       tipoDeMoneda: data['tipoDeMoneda'] ?? '',
-      monto: (data['monto'] ?? 0).toDouble(), // Asegura que sea double
+      monto: (data['monto'] ?? 0).toDouble(), 
       categoria: data['categoria'] ?? '',
       userId: data['userId'] ?? '',
-      fecha: data['fehca'] ?? ','
+      fecha: data['fecha'] ?? ''
     );
   }
       factory Ingreso.fromSnapshot(Map<String, dynamic> json) {

@@ -1,20 +1,24 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gastapp/core/repositories/user_repository.dart';
 import 'package:gastapp/presentations/components/mensaje_pop.dart';
 import 'package:gastapp/presentations/components/send_button.dart';
 import 'package:gastapp/presentations/components/text_field_auth.dart';
 import 'package:gastapp/presentations/providers/login_register_provider.dart';
 import 'package:go_router/go_router.dart';
 
+
 class RegisterScreen extends ConsumerWidget {
-  RegisterScreen({super.key});
+  const RegisterScreen({super.key});
 
 
 
+  
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    
   TextEditingController emailController = TextEditingController();
 
   TextEditingController passwordController = TextEditingController();
@@ -23,11 +27,6 @@ class RegisterScreen extends ConsumerWidget {
 
   TextEditingController usernameController = TextEditingController();
 
-  
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    
     void register() async{
     showDialog(context: context, builder: (context)=> const Center(child: CircularProgressIndicator(),));
 
@@ -38,7 +37,6 @@ class RegisterScreen extends ConsumerWidget {
     }else{
 
     
-    UserRepository repository = UserRepository();
     try{
       ref.read(registerProvider(RegisterParams(usernameController.text, email: emailController.text, password: passwordConfirmController.text)));
       Navigator.pop(context);

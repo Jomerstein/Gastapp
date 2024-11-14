@@ -10,7 +10,7 @@ class IngresoRepository {
   final FirebaseFirestore _firestore;
 
   IngresoRepository(this._firestore);
-  Stream<List<Ingreso>>? getIngresos(String? descripcion, String? categoria)  {
+  Stream<List<Ingreso>>? getIngresos(String? descripcion, String? categoria, DateTime? fecha)  {
   try {
 
     Query<Map<String, dynamic>> query = _firestore.collection("Ingresos");
@@ -26,6 +26,9 @@ class IngresoRepository {
     }
     if (descripcion != null) {
       query = query.where('descripcion', isEqualTo: descripcion);
+    }
+    if(fecha != null){
+      query = query.where('fecha', isEqualTo: fecha);
     }
 
     final snapshot =  query.snapshots();
@@ -51,14 +54,15 @@ class IngresoRepository {
     if(user != null){
       query = query.where('userId', isEqualTo: user.email);
     }
-
-  
     if (categoria != null) {
       query = query.where('categoria', isEqualTo: categoria);
     }
     if (descripcion != null && descripcion.isNotEmpty) {
       query = query.where('descripcion', isEqualTo: descripcion);
      
+    }
+    if(fecha != null){
+      query = query.where('fecha', isEqualTo: fecha);
     }
 
     final snapshot =  query.snapshots();
@@ -135,14 +139,36 @@ class IngresoRepository {
         
          for (var doc in querySnapshot.docs) {
         await doc.reference.delete();
-      
     }
-
+        deleteTransaccionesPorCategoria(nombreCategoria);
       
       }catch(e){
-        print("No se elimino la categoria");
+        
       }
     
   }
+
+  Future<void> deleteTransaccionesPorCategoria(String nombreCategoria)async {
+         QuerySnapshot<Map<String, dynamic>> querySnapshot;
+        try{
+         querySnapshot = await FirebaseFirestore.instance
+              .collection('Ingresos')
+        .where('categoria', isEqualTo: nombreCategoria)
+        .get();
+        for(var doc in querySnapshot.docs){
+          await doc.reference.delete();
+        }
+        querySnapshot = await FirebaseFirestore.instance.collection("Gastos")
+         .where('categoria', isEqualTo: nombreCategoria)
+         .get();
+        for(var doc in querySnapshot.docs){
+          await doc.reference.delete();
+        }
+        }catch(e){
+
+        }
+  }
+       
+  
 }
 

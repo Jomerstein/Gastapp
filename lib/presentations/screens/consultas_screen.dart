@@ -15,15 +15,16 @@ class ConsultasScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final TextEditingController descripcionController = TextEditingController();
+    final TextEditingController dateController = TextEditingController();
     final tipoSeleccionado = ref.watch(tipoSeleccionadoProvider);
     final categoriaSeleccionada = ref.watch(categoriaSeleccionadaConsultaProvider);
     final categorias = ref.watch(getCategoriasProvider);
    
-     InputDecoration _inputDecoration(bool enabled) {
-      return InputDecoration(
+     InputDecoration inputDecoration(bool enabled) {
+      return const InputDecoration(
         filled: true,
-        fillColor: enabled ? Colors.white : Colors.grey[300],
-        border: const OutlineInputBorder(),
+        fillColor: Colors.white,
+        border:  OutlineInputBorder(),
       );
     }
 
@@ -50,10 +51,10 @@ class ConsultasScreen extends ConsumerWidget {
               onChanged: (value) {
                 ref.watch(tipoSeleccionadoProvider.notifier).state = value;
                 ref.watch(categoriaSeleccionadaProvider.notifier).state = null;
-                ref.watch(anoSeleccionadoProvider.notifier).state = null;
+                ref.watch(anioSeleccionadoProvider.notifier).state = null;
                
               },
-              decoration: _inputDecoration(true),
+              decoration: inputDecoration(true),
               value: tipoSeleccionado,
             ),
             const SizedBox(height: 16),
@@ -72,13 +73,13 @@ class ConsultasScreen extends ConsumerWidget {
           
           onChanged: tipoSeleccionado != null ? (value){
           ref.watch(categoriaSeleccionadaConsultaProvider.notifier).state = value;
-          ref.watch(anoSeleccionadoProvider.notifier).state = null;
+          ref.watch(anioSeleccionadoProvider.notifier).state = null;
          
           }:null,
  
               
          
-          decoration: _inputDecoration(tipoSeleccionado != null),
+          decoration: inputDecoration(tipoSeleccionado != null),
           value: categoriaSeleccionada,
          
         );
@@ -90,15 +91,33 @@ class ConsultasScreen extends ConsumerWidget {
             const SizedBox(height: 16),
             const Text('FECHA'),
             const SizedBox(height: 8),
-          GestureDetector(
-              onTap: () {
-                _selectDate(context, ref);
-              },
-              child: TextField(
-                enabled: false,
-                decoration: _inputDecoration(categoriaSeleccionada != null)
-              ),
-            ),
+          TextField(
+                  controller: dateController,
+                  readOnly: true,
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    labelText: 'Seleccione una fecha',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    suffixIcon: const Icon(Icons.calendar_today),
+                  ),
+                  onTap: () async {
+                    DateTime? selectedDate = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(2023),
+                      lastDate: DateTime(2050),
+                    );
+                    
+                    if (selectedDate != null) {
+                      ref.read(anioSeleccionadoProvider.notifier).state = selectedDate;
+                      dateController.text = 
+                        "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}";
+                    }
+                  },
+                ),
             const SizedBox(height: 16),
            
        
@@ -108,10 +127,7 @@ class ConsultasScreen extends ConsumerWidget {
             const SizedBox(height: 8),
             TextField(
               controller: descripcionController,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-               
-              ),
+              decoration: inputDecoration(true),
               onChanged: (value){
                 ref.read(descripcionSeleccionadaProvider.notifier).state = value;
               },
@@ -121,8 +137,7 @@ class ConsultasScreen extends ConsumerWidget {
               alignment: Alignment.center,
               child: ElevatedButton(
                 onPressed: () {
-                 context.pushNamed('listado',
-                  );
+                 context.pushNamed('listado',);
              
                 },
                 
@@ -138,7 +153,8 @@ class ConsultasScreen extends ConsumerWidget {
               child: ElevatedButton(onPressed: ()=>{
                   ref.read(tipoSeleccionadoProvider.notifier).state = null,
                   ref.read(categoriaSeleccionadaConsultaProvider.notifier).state = null,
-                  ref.read(descripcionSeleccionadaProvider.notifier).state = null
+                  ref.read(descripcionSeleccionadaProvider.notifier).state = null,
+                  ref.read(anioSeleccionadoProvider.notifier).state = null,
 
               },
               child: const Text('Clear')), ),
@@ -154,15 +170,3 @@ class ConsultasScreen extends ConsumerWidget {
 
   }
   }
-Future<void> _selectDate(BuildContext context, WidgetRef ref) async {
-  final DateTime? picked = await showDatePicker(
-    context: context,
-    initialDate: DateTime.now(),
-    firstDate: DateTime(2000),
-    lastDate: DateTime(2101),
-  );
-
-  if (picked != null) {
-    ref.read(anoSeleccionadoProvider.notifier).state = picked; // Actualiza el estado de la fecha
-  }
-}
