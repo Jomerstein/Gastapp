@@ -1,18 +1,21 @@
+import 'package:uuid/uuid.dart';
+
 class Categoria {
   String id;
   String nombreCategoria;
   String userId;
 
   Categoria({
-    required this.id,
+    String? id,
     required this.nombreCategoria,
     required this.userId,
-  });
+  }): id = id ?? const Uuid().v4();
   
    Map<String, dynamic> toMap() {
     return {
       'NombreCategoria': nombreCategoria,
-      'userId': userId
+      'userId': userId,
+      'id': id,
    };
    }
    factory Categoria.fromMap(Map<String, dynamic> data) {

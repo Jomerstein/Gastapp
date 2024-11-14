@@ -19,10 +19,8 @@ class _NavbarState extends State<Navbar> {
       case 0:
         context.pushNamed('home');
         break;
+    
       case 1:
-        context.pushNamed('balance');
-        break;
-      case 2:
         context.pushNamed('profile');
         break;
     }
@@ -37,10 +35,7 @@ class _NavbarState extends State<Navbar> {
             icon: Icon(Icons.home),
             label: 'Inicio',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Buscar',
-          ),
+         
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Perfil',

@@ -17,7 +17,7 @@ class IngresoRepository {
 
     User? user = FirebaseAuth.instance.currentUser;
     if(user != null){
-      query = query.where('userId', isEqualTo: user.email);
+      query = query.where('userId', isEqualTo: user.uid);
     }
 
     if (categoria != null) {
@@ -52,7 +52,7 @@ class IngresoRepository {
     Query<Map<String, dynamic>> query = _firestore.collection("Gastos");
     User? user = FirebaseAuth.instance.currentUser;
     if(user != null){
-      query = query.where('userId', isEqualTo: user.email);
+      query = query.where('userId', isEqualTo: user.uid);
     }
     if (categoria != null) {
       query = query.where('categoria', isEqualTo: categoria);
@@ -83,7 +83,7 @@ class IngresoRepository {
   Future<void> deleteTransaccion(Transaccion transaccion) async{
     try {
       final QuerySnapshot<Map<String, dynamic>> querySnapshot;
-      if(transaccion.userId == FirebaseAuth.instance.currentUser!.email){
+      if(transaccion.userId == FirebaseAuth.instance.currentUser!.uid){
         if(transaccion is Ingreso){
         querySnapshot = await FirebaseFirestore.instance
         .collection('Ingresos')
@@ -92,7 +92,7 @@ class IngresoRepository {
       }else{
           querySnapshot = await FirebaseFirestore.instance
         .collection('Gastos')
-        .where('id', isEqualTo: transaccion.id) // Cambiar esto a id
+        .where('id', isEqualTo: transaccion.id) 
         .get();
         
       }
@@ -107,7 +107,7 @@ class IngresoRepository {
       
   
   } catch (e) {
-    
+    throw Error();
   }
 }
   
@@ -121,13 +121,27 @@ class IngresoRepository {
     }
   }
   
-  Future<void> addCategoria (Categoria categoria) async {
-    await _firestore.collection('Categorias').add(categoria.toMap());
+  Future<void> addCategoria(Categoria categoria) async {
+  // Verificar si ya existe una categoría con el mismo nombre
+  var querySnapshot = await _firestore
+      .collection('Categorias')
+      .where('NombreCategoria', isEqualTo: categoria.nombreCategoria)
+      .get();
+
+
+  if (querySnapshot.docs.isNotEmpty) {
+      throw Exception("Ya existe una categoría con ese nombre");
+      
   }
+
+
+  await _firestore.collection('Categorias').add(categoria.toMap());
+ 
+}
   
   Stream<List<Categoria>> getCategorias() {
   return _firestore.collection('Categorias').
-    where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.email).
+    where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid).
     snapshots().map((snapshot) =>
       snapshot.docs.map((doc) => Categoria.fromMap(doc.data())).toList());
 }
@@ -146,7 +160,7 @@ class IngresoRepository {
         deleteTransaccionesPorCategoria(nombreCategoria);
       
       }catch(e){
-        
+        throw Error();
       }
     
   }
@@ -161,7 +175,7 @@ class IngresoRepository {
         .get();
         
         for(var doc in querySnapshot.docs){
-          if(FirebaseAuth.instance.currentUser!.email == doc['userId']){
+          if(FirebaseAuth.instance.currentUser!.uid == doc['userId']){
               await doc.reference.delete();
           }
           
@@ -170,12 +184,12 @@ class IngresoRepository {
          .where('categoria', isEqualTo: nombreCategoria)
          .get();
         for(var doc in querySnapshot.docs){
-         if(FirebaseAuth.instance.currentUser!.email == doc['userId']){
+         if(FirebaseAuth.instance.currentUser!.uid == doc['userId']){
               await doc.reference.delete();
           }
         }
         }catch(e){
-
+            throw Error();
         }
   }
        

@@ -47,6 +47,9 @@ class RegisterScreen extends ConsumerWidget {
     } on PlatformException catch (e){
        GoRouter.of(context).pop();
       mensajePop(e.toString(), context, false);
+    }catch(e){
+     // context.pop();
+      mensajePop(e.toString(), context, false);
     }
     }
   
@@ -54,46 +57,48 @@ class RegisterScreen extends ConsumerWidget {
     
     
     return Scaffold(
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(
-                Icons.person,
-                size: 80,
-                color: Colors.blueGrey,
-              ),
-              const SizedBox(height: 25),
-          
-              const Text("GastApp", style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic),),
-              const SizedBox(height: 20),
-              TextFieldAuth(hintText: "Nombre de usuario", isPass: false, textEditingController: usernameController),
-              const SizedBox(height: 20),
-              TextFieldAuth(hintText: "Email", isPass: false, textEditingController: emailController),
-              const SizedBox(height: 20),
-              TextFieldAuth(hintText: "Ingrese una contraseña", isPass: true, textEditingController: passwordController),
-              const SizedBox(height: 20),
-              TextFieldAuth(hintText: "Repita su contraseña", isPass: true, textEditingController: passwordConfirmController),
-              const SizedBox(height: 4),
-              const SizedBox(height: 40,),
-              SendButton(text: "Registrate", color: Colors.grey, funcion: register,),
-              const SizedBox(height: 20,),
-               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text("Ya tenes cuenta? "),
-                  GestureDetector(
-                    onTap: () => {
-                      context.pushNamed("login")
-                    },
-                    child: const Text("Ingresá", style: TextStyle(fontWeight: FontWeight.bold),
-                    )
-                    )
-                ],
-              )
-            ],
+      body: SingleChildScrollView(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.person,
+                  size: 80,
+                  color: Colors.blueGrey,
+                ),
+                const SizedBox(height: 25),
+            
+                const Text("GastApp", style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic),),
+                const SizedBox(height: 20),
+                TextFieldAuth(hintText: "Nombre de usuario", isPass: false, textEditingController: usernameController),
+                const SizedBox(height: 20),
+                TextFieldAuth(hintText: "Email", isPass: false, textEditingController: emailController),
+                const SizedBox(height: 20),
+                TextFieldAuth(hintText: "Ingrese una contraseña", isPass: true, textEditingController: passwordController),
+                const SizedBox(height: 20),
+                TextFieldAuth(hintText: "Repita su contraseña", isPass: true, textEditingController: passwordConfirmController),
+                const SizedBox(height: 4),
+                const SizedBox(height: 40,),
+                SendButton(text: "Registrate", color: Colors.grey, funcion: register,),
+                const SizedBox(height: 20,),
+                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text("Ya tenes cuenta? "),
+                    GestureDetector(
+                      onTap: () => {
+                        context.pushNamed("login")
+                      },
+                      child: const Text("Ingresá", style: TextStyle(fontWeight: FontWeight.bold),
+                      )
+                      )
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),

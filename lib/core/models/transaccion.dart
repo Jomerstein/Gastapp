@@ -3,7 +3,7 @@
 import 'package:uuid/uuid.dart';
 
 class Transaccion {
-  final String id; // Cambié el tipo a String no nulo
+  final String id; 
   final String descripcion;
   final String tipoDeMoneda;
   final double monto;
@@ -12,7 +12,7 @@ class Transaccion {
   final DateTime fecha;
 
   Transaccion({
-    String? id, // ID opcional en el constructor
+    String? id, 
     required this.descripcion,
     required this.tipoDeMoneda,
     required this.monto,
@@ -34,7 +34,7 @@ class Transaccion {
 
   factory Transaccion.fromMap(Map<String, dynamic> data) {
     return Transaccion(
-      id: data['id'] ?? const Uuid().v4(), // Asegura que siempre haya un ID
+      id: data['id'] ?? const Uuid().v4(), 
       descripcion: data['descripcion'] ?? '',
       tipoDeMoneda: data['tipoDeMoneda'] ?? '',
       monto: (data['monto'] ?? 0).toDouble(), // Asegura que sea double

@@ -25,17 +25,21 @@ final borrarCategoriaProvider = FutureProvider.family<void,String>((ref,nombreCa
 }); 
 
 
-final agregarTransaccionProvider = FutureProvider.autoDispose.family<void, Transaccion>((ref, transaccion) {
+final agregarTransaccionProvider = FutureProvider.autoDispose.family<void, Transaccion>((ref, transaccion) async {
   final firestore = ref.watch(firebaseFirestoreProvider);
   IngresoRepository repository = IngresoRepository(firestore);
-  repository.addTransaccion(transaccion); 
+  await repository.addTransaccion(transaccion); 
 });
 
-final agregarCategoriaProvider = FutureProvider.autoDispose.family<void, Categoria>((ref, categoria) {
+final agregarCategoriaProvider = FutureProvider.autoDispose.family<void, Categoria>((ref, categoria)async {
   final firestore = ref.watch(firebaseFirestoreProvider);
   IngresoRepository repository = IngresoRepository(firestore);
-  
-  return repository.addCategoria(categoria); 
+  try{
+      return await repository.addCategoria(categoria); 
+  }catch(e){
+    throw Exception(e.toString());
+  }
+ 
 });
 
 

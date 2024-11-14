@@ -8,9 +8,6 @@ import 'package:gastapp/presentations/components/navbar.dart';
 import 'package:gastapp/presentations/providers/gastos_ingresos_provider.dart';
 import 'package:go_router/go_router.dart';
 
-
-
-
 class GastosIngresosScreen extends ConsumerWidget {
   GastosIngresosScreen({super.key});
 
@@ -23,8 +20,7 @@ class GastosIngresosScreen extends ConsumerWidget {
 
     final TextEditingController dateController = TextEditingController();
 
-  
-     return Scaffold(
+    return Scaffold(
       appBar: AppBar(
         title: const Text(
           'Ingresos',
@@ -40,16 +36,18 @@ class GastosIngresosScreen extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
-                  
                   children: [
                     Expanded(
-                     
                       child: GestureDetector(
-                        onTap: () => ref.read(tipoTransaccionProvider.notifier).state = "Gasto",
+                        onTap: () => ref
+                            .read(tipoTransaccionProvider.notifier)
+                            .state = "Gasto",
                         child: Container(
                           padding: const EdgeInsets.symmetric(vertical: 20),
                           decoration: BoxDecoration(
-                            color: ref.watch(tipoTransaccionProvider) == "Gasto" ? Colors.red : Colors.grey[300],
+                            color: ref.watch(tipoTransaccionProvider) == "Gasto"
+                                ? Colors.red
+                                : Colors.grey[300],
                             borderRadius: const BorderRadius.only(
                               topLeft: Radius.circular(12),
                               bottomLeft: Radius.circular(12),
@@ -60,7 +58,10 @@ class GastosIngresosScreen extends ConsumerWidget {
                             'Gasto',
                             style: TextStyle(
                               fontSize: 18,
-                              color: ref.watch(tipoTransaccionProvider) == "Gasto" ? Colors.white : Colors.black,
+                              color:
+                                  ref.watch(tipoTransaccionProvider) == "Gasto"
+                                      ? Colors.white
+                                      : Colors.black,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -68,13 +69,17 @@ class GastosIngresosScreen extends ConsumerWidget {
                       ),
                     ),
                     Expanded(
-                      
                       child: GestureDetector(
-                        onTap: () => ref.read(tipoTransaccionProvider.notifier).state = "Ingreso",
+                        onTap: () => ref
+                            .read(tipoTransaccionProvider.notifier)
+                            .state = "Ingreso",
                         child: Container(
                           padding: const EdgeInsets.symmetric(vertical: 20),
                           decoration: BoxDecoration(
-                            color: ref.watch(tipoTransaccionProvider) == "Ingreso" ? Colors.green : Colors.grey[300],
+                            color:
+                                ref.watch(tipoTransaccionProvider) == "Ingreso"
+                                    ? Colors.green
+                                    : Colors.grey[300],
                             borderRadius: const BorderRadius.only(
                               topRight: Radius.circular(12),
                               bottomRight: Radius.circular(12),
@@ -85,7 +90,10 @@ class GastosIngresosScreen extends ConsumerWidget {
                             'Ingreso',
                             style: TextStyle(
                               fontSize: 18,
-                              color: ref.watch(tipoTransaccionProvider) == "Ingreso" ? Colors.white : Colors.black,
+                              color: ref.watch(tipoTransaccionProvider) ==
+                                      "Ingreso"
+                                  ? Colors.white
+                                  : Colors.black,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -99,16 +107,13 @@ class GastosIngresosScreen extends ConsumerWidget {
                 const SizedBox(height: 8),
                 TextField(
                   controller: descripcionController,
-                   decoration: InputDecoration(
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12)
-            ),
-                    
-            hintStyle: const TextStyle(color: Colors.grey)
-                    ),
-                 onChanged: (stri)=>{
-                  ref.read(descripcionProvider.notifier).state = stri
-                 },             ),
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12)),
+                      hintStyle: const TextStyle(color: Colors.grey)),
+                  onChanged: (stri) =>
+                      {ref.read(descripcionProvider.notifier).state = stri},
+                ),
                 const SizedBox(height: 16),
                 const Text('TIPO DE MONEDA'),
                 const SizedBox(height: 8),
@@ -122,13 +127,10 @@ class GastosIngresosScreen extends ConsumerWidget {
                   onChanged: (value) {
                     ref.read(monedaSeleccionadaProvider.notifier).state = value;
                   },
-                    decoration: InputDecoration(
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12)
-            ),
-                     
-            hintStyle: const TextStyle(color: Colors.grey)
-                    ),
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12)),
+                      hintStyle: const TextStyle(color: Colors.grey)),
                 ),
                 const SizedBox(height: 16),
                 const Text('MONTO'),
@@ -142,14 +144,19 @@ class GastosIngresosScreen extends ConsumerWidget {
                     ),
                   ),
                   keyboardType: TextInputType.number,
-                  onChanged: (value)=>{
-                    ref.read(montoProvider.notifier).state = double.tryParse(value) ?? 0
+                  onChanged: (value) => {
+                    ref.read(montoProvider.notifier).state =
+                        double.tryParse(value) ?? 0
                   },
                 ),
-                const SizedBox(height: 16,),
+                const SizedBox(
+                  height: 16,
+                ),
                 const Text("Fecha"),
-                const SizedBox(height: 8,),
-              TextField(
+                const SizedBox(
+                  height: 8,
+                ),
+                TextField(
                   controller: dateController,
                   readOnly: true,
                   decoration: InputDecoration(
@@ -166,69 +173,73 @@ class GastosIngresosScreen extends ConsumerWidget {
                       firstDate: DateTime(2023),
                       lastDate: DateTime(2050),
                     );
-                    
+
                     if (selectedDate != null) {
-                      ref.read(selectedDateProvider.notifier).state = selectedDate;
-                      dateController.text = 
-                        "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}";
+                      ref.read(selectedDateProvider.notifier).state =
+                          selectedDate;
+                      dateController.text =
+                          "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}";
                     }
                   },
                 ),
-                    
-                const SizedBox(height: 16,),
+                const SizedBox(
+                  height: 16,
+                ),
                 const Text('CATEGORIA'),
                 const SizedBox(height: 8),
                 Column(
                   children: [
                     categorias.when(
                       data: (categorias) {
-                          if(categorias.isEmpty){
-                      
-                              return const Center(
-                                
-                                child: Card(
-                                  
-                                  child: Text("No hay categorías"),
-                                ),
-                              );
-                            }
+                        if (categorias.isEmpty) {
+                          return Center(
+                              child: TextField(
+                            readOnly: true,
+                            decoration: InputDecoration(
+                                hintText:
+                                    "No hay categorías, intente agregando una",
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12)),
+                                hintStyle: const TextStyle(color: Colors.grey)),
+                          ));
+                        }
                         return DropdownButtonFormField<String>(
-                          
                           items: categorias.map((categoria) {
-                          
                             return DropdownMenuItem<String>(
                               value: categoria.nombreCategoria,
                               child: Text(categoria.nombreCategoria),
                             );
                           }).toList(),
                           onChanged: (value) {
-                            ref.read(categoriaSeleccionadaProvider.notifier).state = value;
+                            ref
+                                .read(categoriaSeleccionadaProvider.notifier)
+                                .state = value;
                           },
-                          decoration:  InputDecoration(
+                          decoration: InputDecoration(
                             border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12)
-                            ),
+                                borderRadius: BorderRadius.circular(12)),
                           ),
                         );
                       },
-                      loading: () => const Center(child: CircularProgressIndicator()),
+                      loading: () =>
+                          const Center(child: CircularProgressIndicator()),
                       error: (error, stack) => Text('Error: $error'),
                     ),
-                    const SizedBox(height: 6,),
-                  
+                    const SizedBox(
+                      height: 6,
+                    ),
                     ElevatedButton(
-                      onPressed: () => _showFormularioDialog(context, ref), // Llama a la función para mostrar el diálogo
-                          child: const Text('Agregar categoría'),
-                            ),
-                    
+                      onPressed: () => _showFormularioDialog(context,
+                          ref), // Llama a la función para mostrar el diálogo
+                      child: const Text('Agregar categoría'),
+                    ),
                   ],
-                  
                 ),
                 const Spacer(),
                 const Align(
                   alignment: Alignment.center,
                   child: _BotonTransaccion(),
-                  )
+                )
               ],
             ),
           ),
@@ -257,18 +268,26 @@ void _showFormularioDialog(BuildContext context, WidgetRef ref) {
                   labelText: 'Nombre de la categoría',
                 ),
               ),
-         
             ],
           ),
         ),
         actions: [
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               String nombreCategoria = nombreController.text;
-              Categoria categoria = Categoria(id: "", nombreCategoria: nombreCategoria, userId: FirebaseAuth.instance.currentUser!.email ?? "");
-              ref.read(agregarCategoriaProvider(categoria));
-              
-              Navigator.of(context).pop(); 
+              Categoria categoria = Categoria(
+                  nombreCategoria: nombreCategoria,
+                  userId: FirebaseAuth.instance.currentUser!.uid);
+              try {
+                ref.watch(agregarCategoriaProvider(categoria).future);
+              } catch (e) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                      content: Text("Ya existe una categoría con ese nombre")),
+                );
+              }
+
+              Navigator.of(context).pop();
             },
             child: const Text('Enviar'),
           ),
@@ -283,104 +302,101 @@ void _showFormularioDialog(BuildContext context, WidgetRef ref) {
     },
   );
 }
-    
- 
-
-
-
-
 
 class _BotonTransaccion extends ConsumerWidget {
-
   const _BotonTransaccion();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    void clear(){
-                ref.read(monedaSeleccionadaProvider.notifier).state = null;
-                ref.read(categoriaSeleccionadaProvider.notifier).state = null;
-                ref.read(montoProvider.notifier).state = 0;
-                ref.read(descripcionProvider.notifier).state == null;
-                ref.read(selectedDateProvider.notifier).state = null;
+    void clear() {
+      ref.read(monedaSeleccionadaProvider.notifier).state = null;
+      ref.read(categoriaSeleccionadaProvider.notifier).state = null;
+      ref.read(montoProvider.notifier).state = 0;
+      ref.read(descripcionProvider.notifier).state == null;
+      ref.read(selectedDateProvider.notifier).state = null;
     }
 
     return ElevatedButton(
-                onPressed: () {
-                  String tipoDeMoneda = ref.read(monedaSeleccionadaProvider.notifier).state.toString();
-                  String categoria = ref.read(categoriaSeleccionadaProvider.notifier).state.toString();
-                  double monto  = ref.read(montoProvider.notifier).state.toDouble();
-                  String descripcion = ref.read(descripcionProvider.notifier).state.toString();
-                  DateTime? fecha = ref.read(selectedDateProvider.notifier).state;
-                  User? currentUser = FirebaseAuth.instance.currentUser;
-                      if (tipoDeMoneda.isEmpty || categoria.isEmpty || descripcion.isEmpty || monto <= 0 || fecha == null) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                       const SnackBar(content: Text("Por favor, complete todos los campos.")),
-                        );
-                       return;
-                       }
-                  
-                  if(currentUser != null){
-                    
-                  
-                  if(ref.read(tipoTransaccionProvider.notifier).state == "Gasto"){
-                    Gasto gasto = Gasto(
-                      descripcion: descripcion,
-                      tipoDeMoneda: tipoDeMoneda,
-                      monto: monto,
-                      categoria: categoria,
-                      userId: currentUser.email!,
-                      fecha: fecha,
-                    );
-                    ref.read(agregarTransaccionProvider(gasto).future)
-            .then((_) {
+      onPressed: () {
+        String tipoDeMoneda =
+            ref.read(monedaSeleccionadaProvider.notifier).state.toString();
+        String categoria =
+            ref.read(categoriaSeleccionadaProvider.notifier).state.toString();
+        double monto = ref.read(montoProvider.notifier).state.toDouble();
+        String descripcion =
+            ref.read(descripcionProvider.notifier).state.toString();
+        DateTime? fecha = ref.read(selectedDateProvider.notifier).state;
+        User? currentUser = FirebaseAuth.instance.currentUser;
+        if (tipoDeMoneda.isEmpty ||
+            categoria.isEmpty ||
+            descripcion.isEmpty ||
+            monto <= 0 ||
+            fecha == null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+                content: Text("Por favor, complete todos los campos.")),
+          );
+          return;
+        }
+
+        if (currentUser != null) {
+          if (ref.read(tipoTransaccionProvider.notifier).state == "Gasto") {
+            Gasto gasto = Gasto(
+              descripcion: descripcion,
+              tipoDeMoneda: tipoDeMoneda,
+              monto: monto,
+              categoria: categoria,
+              userId: currentUser.uid,
+              fecha: fecha,
+            );
+            ref.read(agregarTransaccionProvider(gasto).future).then((_) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("Transacción agregada exitosamente")),
+                const SnackBar(
+                    content: Text("Transacción agregada exitosamente")),
               );
 
               clear();
               context.go('/home');
-            })
-            .catchError((error) {
+            }).catchError((error) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text("Error al agregar la transacción: $error")),
+                SnackBar(
+                    content: Text("Error al agregar la transacción: $error")),
               );
             });
-                  }else{
-                    Ingreso ingreso = Ingreso(
-                      descripcion: descripcion,
-                      tipoDeMoneda: tipoDeMoneda,
-                      monto: monto,
-                      categoria: categoria,
-                      userId: currentUser.email!,
-                      fecha: fecha,
-                  
-                    );
-                    ref.read(agregarTransaccionProvider(ingreso).future)
-            .then((_) {
+          } else {
+            Ingreso ingreso = Ingreso(
+              descripcion: descripcion,
+              tipoDeMoneda: tipoDeMoneda,
+              monto: monto,
+              categoria: categoria,
+              userId: currentUser.uid,
+              fecha: fecha,
+            );
+            ref.read(agregarTransaccionProvider(ingreso).future).then((_) {
               // Muestra el mensaje de éxito
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("Transacción agregada exitosamente")),
+                const SnackBar(
+                    content: Text("Transacción agregada exitosamente")),
               );
 
               clear();
               context.go('/home');
-            })
-            .catchError((error) {
+            }).catchError((error) {
               // Muestra un mensaje de error si la operación falló
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text("Error al agregar la transacción: $error")),
+                SnackBar(
+                    content: Text("Error al agregar la transacción: $error")),
               );
             });
-                    
-                  }
-                }
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.grey,
-                  padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-                ),
-                child: const Text('Agregar transacción'),
-              ); 
+          }
+        }
+      },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.blue,
+        
+        padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+      ),
+      child: const Text('Agregar transacción', style:  TextStyle(color: Colors.white),),
+    );
   }
 }
-

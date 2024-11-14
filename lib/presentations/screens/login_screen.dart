@@ -66,11 +66,7 @@ class LoginScreen extends ConsumerWidget {
                   const SizedBox(height: 20),
                   TextFieldAuth(hintText: "Contraseña", isPass: true, textEditingController: passwordController),
                   const SizedBox(height: 4),
-                  const Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text("Olvidaste tu contraseña?")
-                  ],),
+                  
                   const SizedBox(height: 40,),
                   SendButton(text: "Iniciar sesión", color: Colors.grey, funcion: login,),
                   const SizedBox(height: 20,),

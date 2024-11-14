@@ -8,8 +8,13 @@ import 'package:gastapp/core/repositories/user_repository.dart';
     
     final registerProvider = StateProvider.family<void, RegisterParams>((ref, params) async {
       UserRepository repository = UserRepository();
-       UserCredential? user = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: params.email, password: params.password);
+      try{
+        UserCredential? user = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: params.email, password: params.password);
       repository.addUser(user, params.username);
+      }catch(e){
+        throw Error();
+      }
+ 
     });
     
 class LoginParams{

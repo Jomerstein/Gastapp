@@ -10,7 +10,7 @@ class UserRepository{
   Future<void> addUser(UserCredential user, String username)async {
 
     await firebaseFirestore.collection("Users")
-    .doc(user.user!.email).set({
+    .doc(user.user!.uid).set({
       'email': user.user!.email,
       'username': username,
     });
