@@ -9,14 +9,14 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
    
 
-    return  Scaffold(
+    return   Scaffold(
       body:Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           
           children: [
             const SizedBox(height: 50),
-            const Text('GastAPP', 
+             const Text('GastAPP', 
             style: TextStyle(
             fontSize: 60, 
             fontFamily: 'Reem Kufi Ink', 
@@ -30,10 +30,10 @@ class HomeScreen extends StatelessWidget {
             
             )
             ),
-            SizedBox(height: MediaQuery.of(context).size.height - 700),
-            const HomeButton(color:Color.fromARGB(204, 255, 59, 48) ,textContent:  'Gastos / Ingresos', route:  'gastosingresos'),
-            const SizedBox(height: 50),
-            const HomeButton(color:Color.fromARGB(204, 48, 131, 255),textContent:  'Consultas', route:  'consultas'), 
+            SizedBox(height: MediaQuery.of(context).size.height * 0.3),
+             const HomeButton(color:Color.fromARGB(204, 255, 59, 48) ,textContent:  'Gastos / Ingresos', route:  'gastosingresos'),
+             const SizedBox(height: 50),
+             const HomeButton(color:Color.fromARGB(204, 48, 131, 255),textContent:  'Consultas', route:  'consultas'), 
             
             
           ],

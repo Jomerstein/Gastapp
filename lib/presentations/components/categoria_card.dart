@@ -31,7 +31,7 @@ class CategoriaCard extends ConsumerWidget {
                 context.pop()
               }, child: const Text("Borrar", style: TextStyle(color: Colors.red),)
               ),
-              TextButton(onPressed: ()=> context.pop(), child: Text("Cancelar"))
+              TextButton(onPressed: ()=> context.pop(), child: const Text("Cancelar"))
            
               ],
               

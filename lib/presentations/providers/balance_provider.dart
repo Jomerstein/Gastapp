@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gastapp/core/models/categoria.dart';
 import 'package:gastapp/core/repositories/repository.dart';
 import 'package:gastapp/presentations/providers/firebase.provider.dart';
 
@@ -28,3 +29,10 @@ final getIngresosProvider = StreamProvider.family<double, String?>((ref, categor
   });
   }
 });
+
+final getCategoriasBalanceProvider = StreamProvider<List<Categoria>>((ref) {
+  final repository = IngresoRepository(ref.watch(firebaseFirestoreProvider));
+  return repository.getCategorias();
+});
+
+final categoriaSeleccionadaBalanceProvider = StateProvider<String?>((ref) => null);

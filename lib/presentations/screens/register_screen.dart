@@ -47,8 +47,6 @@ class RegisterScreen extends ConsumerWidget {
     } on PlatformException catch (e){
        GoRouter.of(context).pop();
       mensajePop(e.toString(), context, false);
-    }catch(e){
-
     }
     }
   

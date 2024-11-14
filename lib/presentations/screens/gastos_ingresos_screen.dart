@@ -21,7 +21,7 @@ class GastosIngresosScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final categorias = ref.watch(getCategoriasProvider);
 
-    final TextEditingController _dateController = TextEditingController();
+    final TextEditingController dateController = TextEditingController();
 
   
      return Scaffold(
@@ -150,7 +150,7 @@ class GastosIngresosScreen extends ConsumerWidget {
                 const Text("Fecha"),
                 const SizedBox(height: 8,),
               TextField(
-                  controller: _dateController,
+                  controller: dateController,
                   readOnly: true,
                   decoration: InputDecoration(
                     labelText: 'Seleccione una fecha',
@@ -169,7 +169,7 @@ class GastosIngresosScreen extends ConsumerWidget {
                     
                     if (selectedDate != null) {
                       ref.read(selectedDateProvider.notifier).state = selectedDate;
-                      _dateController.text = 
+                      dateController.text = 
                         "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}";
                     }
                   },
@@ -183,7 +183,7 @@ class GastosIngresosScreen extends ConsumerWidget {
                     categorias.when(
                       data: (categorias) {
                           if(categorias.isEmpty){
-                            // hacer la card modularizada 
+                      
                               return const Center(
                                 
                                 child: Card(
@@ -359,7 +359,7 @@ class _BotonTransaccion extends ConsumerWidget {
             .then((_) {
               // Muestra el mensaje de éxito
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text("Transacción agregada exitosamente")),
+                const SnackBar(content: Text("Transacción agregada exitosamente")),
               );
 
               clear();

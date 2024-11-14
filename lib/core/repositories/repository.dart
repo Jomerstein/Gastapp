@@ -83,7 +83,8 @@ class IngresoRepository {
   Future<void> deleteTransaccion(Transaccion transaccion) async{
     try {
       final QuerySnapshot<Map<String, dynamic>> querySnapshot;
-      if(transaccion is Ingreso){
+      if(transaccion.userId == FirebaseAuth.instance.currentUser!.email){
+        if(transaccion is Ingreso){
         querySnapshot = await FirebaseFirestore.instance
         .collection('Ingresos')
         .where('id', isEqualTo: transaccion.id)
@@ -102,6 +103,8 @@ class IngresoRepository {
       await doc.reference.delete();
       
     }
+      }
+      
   
   } catch (e) {
     
@@ -151,18 +154,25 @@ class IngresoRepository {
   Future<void> deleteTransaccionesPorCategoria(String nombreCategoria)async {
          QuerySnapshot<Map<String, dynamic>> querySnapshot;
         try{
+          
          querySnapshot = await FirebaseFirestore.instance
               .collection('Ingresos')
         .where('categoria', isEqualTo: nombreCategoria)
         .get();
+        
         for(var doc in querySnapshot.docs){
-          await doc.reference.delete();
+          if(FirebaseAuth.instance.currentUser!.email == doc['userId']){
+              await doc.reference.delete();
+          }
+          
         }
         querySnapshot = await FirebaseFirestore.instance.collection("Gastos")
          .where('categoria', isEqualTo: nombreCategoria)
          .get();
         for(var doc in querySnapshot.docs){
-          await doc.reference.delete();
+         if(FirebaseAuth.instance.currentUser!.email == doc['userId']){
+              await doc.reference.delete();
+          }
         }
         }catch(e){
 

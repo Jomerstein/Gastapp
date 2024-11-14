@@ -34,134 +34,136 @@ class ConsultasScreen extends ConsumerWidget {
         title: const Text('Listado', style: TextStyle(fontWeight: FontWeight.bold)),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text('TIPO'),
-            const SizedBox(height: 8),
-            DropdownButtonFormField<String>(
-              items: ['Gasto', 'Ingreso']
-                  .map((String value) => DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      ))
-                  .toList(),
-              onChanged: (value) {
-                ref.watch(tipoSeleccionadoProvider.notifier).state = value;
-                ref.watch(categoriaSeleccionadaProvider.notifier).state = null;
-                ref.watch(anioSeleccionadoProvider.notifier).state = null;
-               
-              },
-              decoration: inputDecoration(true),
-              value: tipoSeleccionado,
-            ),
-            const SizedBox(height: 16),
-            const Text('CATEGORIA'),
-            const SizedBox(height: 8),
-            
-        categorias.when(
-      data: (categorias) {
-        return DropdownButtonFormField<String>(
-          items: categorias.map((Categoria categoria) {
-            return DropdownMenuItem<String>(
-              value: categoria.nombreCategoria,
-              child: Text(categoria.nombreCategoria),
-            );
-          }).toList(),
-          
-          onChanged: tipoSeleccionado != null ? (value){
-          ref.watch(categoriaSeleccionadaConsultaProvider.notifier).state = value;
-          ref.watch(anioSeleccionadoProvider.notifier).state = null;
-         
-          }:null,
- 
-              
-         
-          decoration: inputDecoration(tipoSeleccionado != null),
-          value: categoriaSeleccionada,
-         
-        );
-      },
-      loading: () => const CircularProgressIndicator(), 
-      error: (error, stackTrace) => Text('Error: $error'),
-    ),
-             
-            const SizedBox(height: 16),
-            const Text('FECHA'),
-            const SizedBox(height: 8),
-          TextField(
-                  controller: dateController,
-                  readOnly: true,
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white,
-                    labelText: 'Seleccione una fecha',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    suffixIcon: const Icon(Icons.calendar_today),
-                  ),
-                  onTap: () async {
-                    DateTime? selectedDate = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime(2023),
-                      lastDate: DateTime(2050),
-                    );
-                    
-                    if (selectedDate != null) {
-                      ref.read(anioSeleccionadoProvider.notifier).state = selectedDate;
-                      dateController.text = 
-                        "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}";
-                    }
-                  },
-                ),
-            const SizedBox(height: 16),
-           
-       
-       
-            const SizedBox(height: 16),
-            const Text('DESCRIPCION'),
-            const SizedBox(height: 8),
-            TextField(
-              controller: descripcionController,
-              decoration: inputDecoration(true),
-              onChanged: (value){
-                ref.read(descripcionSeleccionadaProvider.notifier).state = value;
-              },
-            ),
-            const SizedBox(height: 16),
-            Align(
-              alignment: Alignment.center,
-              child: ElevatedButton(
-                onPressed: () {
-                 context.pushNamed('listado',);
-             
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('TIPO'),
+              const SizedBox(height: 8),
+              DropdownButtonFormField<String>(
+                items: ['Gasto', 'Ingreso']
+                    .map((String value) => DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        ))
+                    .toList(),
+                onChanged: (value) {
+                  ref.watch(tipoSeleccionadoProvider.notifier).state = value;
+                  ref.watch(categoriaSeleccionadaProvider.notifier).state = null;
+                  ref.watch(anioSeleccionadoProvider.notifier).state = null;
+                 
                 },
-                
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  textStyle: const TextStyle(color: Colors.white),
-                  
-                ),
-                child: const Text('Buscar'),
+                decoration: inputDecoration(true),
+                value: tipoSeleccionado,
               ),
-            ),
-            Align(
-              child: ElevatedButton(onPressed: ()=>{
-                  ref.read(tipoSeleccionadoProvider.notifier).state = null,
-                  ref.read(categoriaSeleccionadaConsultaProvider.notifier).state = null,
-                  ref.read(descripcionSeleccionadaProvider.notifier).state = null,
-                  ref.read(anioSeleccionadoProvider.notifier).state = null,
-
-              },
-              child: const Text('Clear')), ),
+              const SizedBox(height: 16),
+              const Text('CATEGORIA'),
+              const SizedBox(height: 8),
+              
+          categorias.when(
+        data: (categorias) {
+          return DropdownButtonFormField<String>(
+            items: categorias.map((Categoria categoria) {
+              return DropdownMenuItem<String>(
+                value: categoria.nombreCategoria,
+                child: Text(categoria.nombreCategoria),
+              );
+            }).toList(),
             
-          ],
+            onChanged: tipoSeleccionado != null ? (value){
+            ref.watch(categoriaSeleccionadaConsultaProvider.notifier).state = value;
+            ref.watch(anioSeleccionadoProvider.notifier).state = null;
+           
+            }:null,
+         
+                
+           
+            decoration: inputDecoration(tipoSeleccionado != null),
+            value: categoriaSeleccionada,
+           
+          );
+        },
+        loading: () => const CircularProgressIndicator(), 
+        error: (error, stackTrace) => Text('Error: $error'),
+            ),
+               
+              const SizedBox(height: 16),
+              const Text('FECHA'),
+              const SizedBox(height: 8),
+            TextField(
+                    controller: dateController,
+                    readOnly: true,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      labelText: 'Seleccione una fecha',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      suffixIcon: const Icon(Icons.calendar_today),
+                    ),
+                    onTap: () async {
+                      DateTime? selectedDate = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(2023),
+                        lastDate: DateTime(2050),
+                      );
+                      
+                      if (selectedDate != null) {
+                        ref.read(anioSeleccionadoProvider.notifier).state = selectedDate;
+                        dateController.text = 
+                          "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}";
+                      }
+                    },
+                  ),
+              const SizedBox(height: 16),
+             
+         
+         
+              const SizedBox(height: 16),
+              const Text('DESCRIPCION'),
+              const SizedBox(height: 8),
+              TextField(
+                controller: descripcionController,
+                decoration: inputDecoration(true),
+                onChanged: (value){
+                  ref.read(descripcionSeleccionadaProvider.notifier).state = value;
+                },
+              ),
+              const SizedBox(height: 16),
+              Align(
+                alignment: Alignment.center,
+                child: ElevatedButton(
+                  onPressed: () {
+                   context.pushNamed('listado',);
+               
+                  },
+                  
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    textStyle: const TextStyle(color: Colors.white),
+                    
+                  ),
+                  child: const Text('Buscar'),
+                ),
+              ),
+              Align(
+                child: ElevatedButton(onPressed: ()=>{
+                    ref.read(tipoSeleccionadoProvider.notifier).state = null,
+                    ref.read(categoriaSeleccionadaConsultaProvider.notifier).state = null,
+                    ref.read(descripcionSeleccionadaProvider.notifier).state = null,
+                    ref.read(anioSeleccionadoProvider.notifier).state = null,
+        
+                },
+                child: const Text('Clear')), ),
+              
+            ],
+          ),
+        
         ),
-      
       ),
        bottomNavigationBar: const Navbar(),
     );
