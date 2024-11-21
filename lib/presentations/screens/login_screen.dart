@@ -42,6 +42,9 @@ class LoginScreen extends ConsumerWidget {
       mensajePop("Error de conexión o plataforma: ${e.message}", context, false);
 
 
+     }catch(e){
+      context.pop();
+        mensajePop(e.toString(), context, false);
      }
   }
     return Scaffold(

@@ -272,31 +272,56 @@ void _showFormularioDialog(BuildContext context, WidgetRef ref) {
           ),
         ),
         actions: [
-          TextButton(
-            onPressed: () async {
-              String nombreCategoria = nombreController.text;
-              Categoria categoria = Categoria(
-                  nombreCategoria: nombreCategoria,
-                  userId: FirebaseAuth.instance.currentUser!.uid);
-              try {
-                ref.watch(agregarCategoriaProvider(categoria).future);
-              } catch (e) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                      content: Text("Ya existe una categoría con ese nombre")),
-                );
-              }
+      TextButton(
+  onPressed: () async {
+    String nombreCategoria = nombreController.text;
+    Categoria categoria = Categoria(
+      nombreCategoria: nombreCategoria,
+      userId: FirebaseAuth.instance.currentUser!.uid,
+    );
 
-              Navigator.of(context).pop();
-            },
-            child: const Text('Enviar'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(); // Cierra el diálogo
-            },
-            child: const Text('Cancelar'),
-          ),
+
+    try {
+
+      await ref.read(agregarCategoriaProvider.notifier).agregarCategoria(categoria);
+
+      // Verificar si la categoría se agregó correctamente
+      final estado = ref.read(agregarCategoriaProvider);
+      estado.when(
+        data: (_) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Categoría añadida exitosamente")),
+          );
+        },
+        loading: () {
+   
+        },
+        error: (error, stackTrace) {
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Ya existe una categoría con ese nombre")),
+          );
+        },
+      );
+    } catch (e) {
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Ocurrió un error inesperado")),
+      );
+    }
+
+    // Cierra el diálogo
+    Navigator.of(context).pop();
+  },
+  child: const Text('Enviar'),
+),
+
+TextButton(
+  onPressed: () {
+    Navigator.of(context).pop(); // Cierra el diálogo
+  },
+  child: const Text('Cancelar'),
+),
         ],
       );
     },

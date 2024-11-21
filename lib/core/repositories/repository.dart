@@ -126,6 +126,7 @@ class IngresoRepository {
   var querySnapshot = await _firestore
       .collection('Categorias')
       .where('NombreCategoria', isEqualTo: categoria.nombreCategoria)
+      .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
       .get();
 
 
@@ -163,6 +164,22 @@ class IngresoRepository {
         throw Error();
       }
     
+  }
+
+  Future<void> updateCategoria(String nombreViejo, String nombreNuevo)async {
+    try{
+      final QuerySnapshot<Map<String, dynamic>> querySnapshot;
+
+      querySnapshot = await FirebaseFirestore.instance.collection("Categorias")
+      .where('NombreCategoria', isEqualTo: nombreViejo)
+      .get();
+
+      for(var doc in querySnapshot.docs){
+         await doc.reference.update({'NombreCategoria': nombreNuevo});
+      }
+    }catch(e){
+         print("Error al actualizar la categoría: $e");
+    }
   }
 
   Future<void> deleteTransaccionesPorCategoria(String nombreCategoria)async {

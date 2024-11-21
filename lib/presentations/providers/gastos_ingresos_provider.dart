@@ -24,6 +24,11 @@ final borrarCategoriaProvider = FutureProvider.family<void,String>((ref,nombreCa
 
 }); 
 
+final updateCategoriaProvider = FutureProvider.family<void, List<String>>((ref, nombreCategoria) async {
+    var repository = IngresoRepository(ref.watch(firebaseFirestoreProvider));
+    await repository.updateCategoria(nombreCategoria[0], nombreCategoria[1]);
+});
+
 
 final agregarTransaccionProvider = FutureProvider.autoDispose.family<void, Transaccion>((ref, transaccion) async {
   final firestore = ref.watch(firebaseFirestoreProvider);
@@ -31,16 +36,27 @@ final agregarTransaccionProvider = FutureProvider.autoDispose.family<void, Trans
   await repository.addTransaccion(transaccion); 
 });
 
-final agregarCategoriaProvider = FutureProvider.autoDispose.family<void, Categoria>((ref, categoria)async {
+final agregarCategoriaProvider = StateNotifierProvider<CategoriaStateNotifier, AsyncValue<void>>((ref) {
   final firestore = ref.watch(firebaseFirestoreProvider);
   IngresoRepository repository = IngresoRepository(firestore);
-  try{
-      return await repository.addCategoria(categoria); 
-  }catch(e){
-    throw Exception(e.toString());
-  }
- 
+  return CategoriaStateNotifier(repository);
 });
+
+class CategoriaStateNotifier extends StateNotifier<AsyncValue<void>> {
+  CategoriaStateNotifier(this._repository) : super(const AsyncData(null));
+
+  final IngresoRepository _repository;
+
+  Future<void> agregarCategoria(Categoria categoria) async {
+    try {
+      state = const AsyncLoading(); 
+      await _repository.addCategoria(categoria);
+      state = const AsyncData(null); 
+    } catch (e, stackTrace) {
+      state = AsyncError(e.toString(), stackTrace); 
+    }
+  }
+}
 
 
 

@@ -28,9 +28,11 @@ class ConsultasScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: Colors.grey[200],
-      appBar: AppBar(
-        title: const Text('Listado',
-            style: TextStyle(fontWeight: FontWeight.bold)),
+        appBar: AppBar(
+        title: const Text(
+          'Listado',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         centerTitle: true,
       ),
       body: SingleChildScrollView(

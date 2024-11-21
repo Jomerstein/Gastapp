@@ -9,6 +9,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Center(
+        
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [

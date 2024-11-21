@@ -31,7 +31,15 @@ class ListadoScreen extends ConsumerWidget {
       return repository.getIngresos(descripcion, categoria, anio);
     }
 
-  }  return  Scaffold(
+  }  
+  return  Scaffold(
+    appBar: AppBar(
+        title: const Text(
+          'Listado',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+      ),
       body: StreamBuilder(stream: getTransacciones(), builder: (context,snapshot){
           if(snapshot.connectionState == ConnectionState.waiting){
               return const Center(
