@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gastapp/core/repositories/user_repository.dart';
 
     final loginProvider = StateProvider.family<void, LoginParams>((ref,params) async {
-        await FirebaseAuth.instance.signInWithEmailAndPassword(email: params.email, password: params.password);
+    await FirebaseAuth.instance.signInWithEmailAndPassword(email: params.email, password: params.password);
     });
     
     final registerProvider = StateProvider.family<void, RegisterParams>((ref, params) async {

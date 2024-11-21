@@ -11,11 +11,6 @@ import 'package:go_router/go_router.dart';
 class LoginScreen extends ConsumerWidget {
   const  LoginScreen({super.key});
 
-
-
-
- 
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     
@@ -26,8 +21,9 @@ class LoginScreen extends ConsumerWidget {
      showDialog(context: context, builder: (context)=> const Center(child: CircularProgressIndicator(),));
 
      try{
-      ref.read(loginProvider(LoginParams(email: emailController.text, password: passwordController.text)));
-      if(context.mounted){
+     // ref.read(loginProvider(LoginParams(email: emailController.text, password: passwordController.text)));
+         await FirebaseAuth.instance.signInWithEmailAndPassword(email: emailController.text, password: passwordController.text);
+         if(context.mounted){
         context.pop();
           context.pushNamed("auth");
       } 
@@ -35,17 +31,21 @@ class LoginScreen extends ConsumerWidget {
      on FirebaseAuthException catch(e){
         context.pop();
         mensajePop(e.message, context, false);
+        
        
      } on PlatformException catch (e) {
 
-      context.pop();
+    context.pop();
       mensajePop("Error de conexión o plataforma: ${e.message}", context, false);
 
 
      }catch(e){
-      context.pop();
+              context.pop();
         mensajePop(e.toString(), context, false);
      }
+
+     
+        
   }
     return Scaffold(
       body: SafeArea(
@@ -65,7 +65,7 @@ class LoginScreen extends ConsumerWidget {
               
                   const Text("GastApp", style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic),),
                   const SizedBox(height: 20),
-                  TextFieldAuth(hintText: "Usuario", isPass: false, textEditingController: emailController),
+                  TextFieldAuth(hintText: "Email", isPass: false, textEditingController: emailController),
                   const SizedBox(height: 20),
                   TextFieldAuth(hintText: "Contraseña", isPass: true, textEditingController: passwordController),
                   const SizedBox(height: 4),

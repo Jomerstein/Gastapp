@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gastapp/core/repositories/user_repository.dart';
 import 'package:gastapp/presentations/components/mensaje_pop.dart';
 import 'package:gastapp/presentations/components/send_button.dart';
 import 'package:gastapp/presentations/components/text_field_auth.dart';
@@ -38,7 +39,11 @@ class RegisterScreen extends ConsumerWidget {
 
     
     try{
-      ref.read(registerProvider(RegisterParams(usernameController.text, email: emailController.text, password: passwordConfirmController.text)));
+      //ref.read(registerProvider(RegisterParams(usernameController.text, email: emailController.text, password: passwordConfirmController.text)));
+       UserRepository repository = UserRepository();
+    
+        UserCredential? user = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: emailController.text, password: passwordController.text);
+      repository.addUser(user, usernameController.text);
       Navigator.pop(context);
       context.pushNamed("auth");
     } on FirebaseAuthException catch(e){
@@ -48,7 +53,7 @@ class RegisterScreen extends ConsumerWidget {
        GoRouter.of(context).pop();
       mensajePop(e.toString(), context, false);
     }catch(e){
-     // context.pop();
+     context.pop();
       mensajePop(e.toString(), context, false);
     }
     }
